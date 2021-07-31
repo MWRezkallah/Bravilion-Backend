@@ -1,0 +1,1 @@
+xcopy ..\\eskedo-models\\src\\* .\\src\\models /e /c /y

@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    // "noImplicitReturns": true,
+    // "noUnusedLocals": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2017",
+    "baseUrl": "./"
+  },
+  "compileOnSave": true,
+  "include": [
+    "src"
+, "src/repositories/.repository copy.ts"  ],
+  "exclude": ["node_modules", "**/__tests__/*", "lib", "**/lib/*"]
+}
