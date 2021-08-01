@@ -5,7 +5,4 @@ export interface IUser extends mongoose.Document {
     email: string;
     password: string;
     tokens:{token:string}[]
-    encrypPassword(password: string): Promise<string>;
-    validatePassword(password: string): Promise<boolean>;
-    generateToken():any;
 }

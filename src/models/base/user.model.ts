@@ -47,7 +47,7 @@ userSchema.methods.generateToken = async function(){
     const prefix = 6;
     const exp = new Date(new Date().getTime()+(prefix*24*60*60*1000));
 
-    const token = jwt.sign({_id: this._id.toString(), username: this.username, exp: exp.getMilliseconds()}, 'aqikdk239slkm0+@kkl#$%mds2');
+    const token = jwt.sign({_id: this._id.toString(), username: this.username, exp: exp.getMilliseconds()}, `${process.env.apiSecretKey}`);
 
     this.tokens =  this.tokens?.concat({token});
     await this.save()

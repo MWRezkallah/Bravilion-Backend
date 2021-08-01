@@ -6,8 +6,8 @@ import { IRepository } from "./iRepository";
 export class Repository<T> implements IRepository<T> {
 
 
-    dbUrl = 'mongodb+srv://AhmedFathi96:271996Ahmed@cluster0.bg1zo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-    dbName = 'beviloin';
+    dbUrl = `${process.env.connectionString}`;
+    dbName = `${process.env.dbName}`;
 
     dbClient: MongoClient;
     collection: Collection | undefined;
@@ -93,8 +93,7 @@ export class Repository<T> implements IRepository<T> {
         if (!this.collection) {
             await this.initCollection();
         }
-        const convertedId = new ObjectID(id);//req.params.id
-        const filter = { "_id": convertedId };
+        const filter = { "_id": id };
         const data = await this.collection?.updateOne(
             filter,
             { $set: item },
@@ -113,8 +112,7 @@ export class Repository<T> implements IRepository<T> {
             await this.initCollection();
         }
 
-        const convertedId = new ObjectID(id);//req.params.id
-        const filter = { "_id": convertedId };
+        const filter = { "_id": id };
         const data = await this.collection?.deleteOne(filter);
         if (cleanUp) {
             this.cleanUp();
@@ -141,8 +139,7 @@ export class Repository<T> implements IRepository<T> {
         if (!this.collection) {
             await this.initCollection();
         }
-        const convertedId = new ObjectID(id);//req.params.id
-        const filter = { "_id": convertedId };
+        const filter = { "_id": id };
         const result = await this.collection!.findOne(filter);
         // results = JSON.parse(JSON.stringify(results));
         const ret: any[] = [];

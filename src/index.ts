@@ -1,6 +1,10 @@
+
 import * as express from 'express';
 import * as cors from 'cors';
 
+import * as dotenv from 'dotenv';
+const evParsed = dotenv.config({path:"./src/.env"}); // run npm run start from parent directory
+console.log(evParsed);
 
 import AuthRouter from './routes/auth.route';
 
@@ -24,50 +28,8 @@ app.get('/', (req:any, res:any) => {
 })
 
     
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+app.listen(port, () => console.log(`Example app listening at ${process.env.baseUrl}:${port}`))
 
 
 
 app.use('/api/auth', AuthRouter);
-
-
-
-
-
-
-// app.get('/', (req, res) => {
-
-// });
-
-
-
-//exports.app = functions.https.onRequest(exapp);
-
-    // How to call 
-
-
-    // const data: any = { function: 'orderRequest', userId: '', isCallBack: isCallBack, data: order };
-    // var addMessage = this.functions.httpsCallable('sz');
-    // addMessage(data).subscribe(result => {
-    //   loader.dismiss().then(() => { });
-    //   console.log('what is sent', data);
-    //   console.log('result', result);
-    //   if (result && result.data && result.code && result.code == 200) {
-    //     this.navCtrl.navigateRoot(['/confirmation', { id: result.id }]);
-    //   }
-
-    //   if (result.isError) {
-    //     this.allowOrder = true;
-    //     this.showAlert(result.msg).then(() => { });
-    //   }
-
-    //   // ...
-    // }, error => {
-    //   // Getting the Error details.
-    //   var code = error.code;
-    //   var message = error.message;
-    //   var details = error.details;
-    //   loader.dismiss().then(() => { });
-    //   console.log('Error', error);
-
-    // });
