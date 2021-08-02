@@ -41,7 +41,7 @@ export const logout = async (req: Request, res: Response) => {
             return token.token != req.body.token
         })
         const userRepo = new UserRepository()
-        await userRepo.updateByQuery(req.body.user._id, {tokens : req.body.user.tokens})
+        await userRepo.update(req.body.user._id,  req.body.user)
         res.status(200).send({
             status: 'Success',
             data: {
@@ -54,17 +54,17 @@ export const logout = async (req: Request, res: Response) => {
 
 export const signUp = async (req: Request, res: Response) =>{
 
-    const userRepo = new UserRepository()
+    try{
 
+    const userRepo = new UserRepository()
         const newUser = {
             name : req.body.name,
             username: req.body.username,
             email: req.body.email,
-            password: req.body.password,
+            password: await userRepo.encrypPassword(req.body.password),
             phone : req.body.phone,
         };
 
-    try{
 
     const userId = await userRepo.create(newUser as IUser);
     const token = await userRepo.generateToken(userId);
