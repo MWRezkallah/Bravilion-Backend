@@ -1,5 +1,3 @@
-/* eslint-disable space-before-blocks */
-import { Db, CollectionCreateOptions } from "mongodb";
 import * as bcrypt  from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 
