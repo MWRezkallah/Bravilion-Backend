@@ -3,18 +3,20 @@ import { Request, Response } from 'express'
 import e = require('express');
 import * as jwt from 'jsonwebtoken';
 import { UserRepository } from '../repositories/UserRepository';
-
+import User from '../models/base/user.model';
+import { connect } from '../controllers/connect.controller';
 
 export const authCheck = async (req: Request, res: Response, next:any) =>{
 
     try{
+        connect();
         const token = req.header('Authorization') !== undefined? req.header('Authorization')?.replace('Bearer ', ''): "";
         if(!token) {throw new Error("Token is missing!")}
 
         const decoded = jwt.verify(token ,`${process.env.apiSecretKey}`, {complete : true}) as any;
-
-        const userRepo = new UserRepository();
-        const user = await userRepo.findOneByQuery({"tokens":{token:token}});
+        console.log(decoded)
+        const user = await User.findOne({"tokens.token":token});
+        console.log(user)
         if(!user) throw new Error("Invalid Token")
         
 

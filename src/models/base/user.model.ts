@@ -18,11 +18,19 @@ const userSchema = new mongoose.Schema<IUser>({
         type: String,
         unique: true,
         required: true,
-        lowercase: true
+        lowercase: true,
+        trim : true,
+        match : /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ 
     },
-    password: {
-        type: String,
-        required: true
+    phone:{
+        type :"string",
+        required : true,
+        trim : true,
+        match : /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
+    },
+    password : {
+        type :"string",
+        required: true,
     },
     tokens: [{
         token: {
@@ -34,9 +42,10 @@ const userSchema = new mongoose.Schema<IUser>({
     timestamps: true
 });
 
+
 userSchema.methods.encrypPassword = async (password: string): Promise<string> => {
     const salt = await bcrypt.genSalt(10);
-    return bcrypt.hash(password, salt);
+    return await bcrypt.hash(password, salt);
 };
 
 userSchema.methods.validatePassword = async function(password: string): Promise<boolean>{
@@ -47,9 +56,10 @@ userSchema.methods.generateToken = async function(){
     const prefix = 6;
     const exp = new Date(new Date().getTime()+(prefix*24*60*60*1000));
 
-    const token = jwt.sign({_id: this._id.toString(), username: this.username, exp: exp.getMilliseconds()}, `${process.env.apiSecretKey}`);
+    const token = jwt.sign({_id: this._id, username: this.username, email: this.email} , `${process.env.apiSecretKey}`, {expiresIn : `${ exp.getDate()} days`});
 
-    this.tokens =  this.tokens?.concat({token});
+    if(this.tokens === undefined) this.tokens=[];
+    this.tokens.push({token:token});
     await this.save()
     return token;
 }

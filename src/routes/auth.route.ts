@@ -6,7 +6,7 @@ import { userRegister } from '../middleware/userRegisteration';
 const router = Router();
 
 router.post('/login', login);
-router.post('/sign-up',[userRegister], signUp);
+router.post('/sign-up', signUp);
 router.post('/logout', [authCheck], logout);
 
 export default router;

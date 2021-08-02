@@ -6,4 +6,7 @@ export interface IUser extends mongoose.Document {
     password: string;
     phone : string;
     tokens:{token:string}[]
+    encrypPassword(password: string): Promise<string>;
+    validatePassword(password: string): Promise<boolean>;
+    generateToken():string;
 }
