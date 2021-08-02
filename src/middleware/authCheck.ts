@@ -1,17 +1,23 @@
 
 import { Request, Response } from 'express'
 import * as jwt from 'jsonwebtoken';
-import User from '../models/base/user.model';
+import { UserRepository } from '../repositories/UserRepository';
 
-const authCheck = async (req: Request, res: Response, next:any) =>{
+
+export const authCheck = async (req: Request, res: Response, next:any) =>{
+
     try{
-        const token       = req.header('Authorization') !== undefined? req.header('Authorization').replace('Bearer ', ''): "";
-        const decoded     = jwt.verify(token, 'FuckersYouKNowNothing');
-        const userInfo    = await User.findOne({_id:decoded._id, 'tokens.token': token});
-        if(!userInfo){
-            throw new Error('')
-        }
-        req.body.admin  = userInfo;
+        const token = req.header('Authorization') !== undefined? req.header('Authorization')?.replace('Bearer ', ''): "";
+        
+        if(!token) {throw new Error("Token is missing!")}
+
+        const decoded  =  jwt.verify(token ,`${process.env.apiSecretKey}`) as any;
+
+
+        const userRepo = new UserRepository();
+        const user = await userRepo.findOneByQuery({ _id : decoded._id, 'tokens.token': token});
+       
+        req.body.user  = user;
         req.body.token  = token;
         next();
     }catch(err){

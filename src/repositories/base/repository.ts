@@ -149,7 +149,6 @@ export class Repository<T> implements IRepository<T> {
         }
         return ret;
     }
-
     async findAllPaging(limit: number, skip: number, cleanUp?: boolean): Promise<any> {
         if (!this.collection) {
             await this.initCollection();
