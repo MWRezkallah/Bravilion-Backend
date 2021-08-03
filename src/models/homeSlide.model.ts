@@ -1,7 +1,7 @@
 import { IFile } from ".";
 
 export interface IHomeSlider{
-    _id: string;
+    _id?: string;
     header:string;
     subHeader:string;
     desktopImage:IFile;

@@ -37,9 +37,9 @@ export class Repository<T> implements IRepository<T> {
                 this.collection = collection;
 
                 if (!collection) {
-                    console.log('collection name is ', this.collectionName);
+                    // console.log('collection name is ', this.collectionName);
                     this.collection = await db.createCollection(this.collectionName);
-                    console.log("Collection is created!");
+                    // console.log("Collection is created!");
                 }
 
             } else {
@@ -93,7 +93,8 @@ export class Repository<T> implements IRepository<T> {
         if (!this.collection) {
             await this.initCollection();
         }
-        const filter = { "_id": id };
+        const convertedId = new ObjectID(id);
+        const filter = { "_id": convertedId };
         const data = await this.collection?.updateOne(
             filter,
             { $set: item },
@@ -112,7 +113,8 @@ export class Repository<T> implements IRepository<T> {
             await this.initCollection();
         }
 
-        const filter = { "_id": id };
+        const convertedId = new ObjectID(id);
+        const filter = { "_id": convertedId };
         const data = await this.collection?.deleteOne(filter);
         if (cleanUp) {
             this.cleanUp();
@@ -139,15 +141,11 @@ export class Repository<T> implements IRepository<T> {
         if (!this.collection) {
             await this.initCollection();
         }
-        const filter = { "_id": id };
+        const convertedId = new ObjectID(id);
+        const filter = { "_id": convertedId };
         const result = await this.collection!.findOne(filter);
-        // results = JSON.parse(JSON.stringify(results));
-        const ret: any[] = [];
-        ret.push(result);
-        if (cleanUp) {
-            this.cleanUp();
-        }
-        return ret;
+        
+        return result;
     }
     async findAllPaging(limit: number, skip: number, cleanUp?: boolean): Promise<any> {
         if (!this.collection) {
