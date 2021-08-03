@@ -4,16 +4,28 @@ import { HomeSliderRepository } from '../repositories/HomeSliderRepository';
 import { IFile, IHomeSlider } from '../models';
 
 
-const extractImageModel = (file:any):IFile =>{
-    const createdAt = file.filename.slice(file.filename.indexOf('-')+1,file.filename.lastIndexOf('-')+1);
-    const path  = file.path.split("\\").join("/");
+// const extractImageModel = (file:any):IFile =>{
+//     const createdAt = file.filename.slice(file.filename.indexOf('-')+1,file.filename.lastIndexOf('-')+1);
+//     const path  = file.path.split("\\").join("/");
+
+//     return {
+//         name:file.filename,
+//         type:file.mimetype,
+//         path:path,
+//         createdAt:Number.parseInt(createdAt),
+//         modifiedAt:Number.parseInt(createdAt)
+//     }
+// }
+
+
+const extractImageModel = (file:any, createdAt = Date.now()):IFile =>{
 
     return {
         name:file.filename,
         type:file.mimetype,
-        path:path,
-        createdAt:Number.parseInt(createdAt),
-        modifiedAt:Number.parseInt(createdAt)
+        path:file.path,
+        createdAt:createdAt,
+        modifiedAt: Date.now()
     }
 }
 
@@ -94,15 +106,23 @@ export const updateHomeSlider = async (req: Request, res: Response) => {
         const _id = req.params.id;
         const slider:any = await homeSliderRepo.findOne(_id);
         
-        const prevDesktopImage = slider.desktopImage.path;
-        const prevMobileImage  = slider.mobileImage.path;
-        unlinkSync(prevDesktopImage);
-        unlinkSync(prevMobileImage);
+        // const prevDesktopImage = slider.desktopImage.path;
+        // const prevMobileImage  = slider.mobileImage.path;
+        // unlinkSync(prevDesktopImage);
+        // unlinkSync(prevMobileImage);
+
+        const prevDesktopImage = slider.desktopImage;
+        const prevMobileImage  = slider.mobileImage;
+        unlinkSync(prevDesktopImage.path);
+        unlinkSync(prevMobileImage.path);
+
 
         const values = Object.values(req.files !== undefined ? req.files: {});
 
-        const desktopImageData = extractImageModel(values[0][0]);
-        const mobileImageData  = extractImageModel(values[1][0]);
+        // const desktopImageData = extractImageModel(values[0][0]);
+        // const mobileImageData  = extractImageModel(values[1][0]);
+        const desktopImageData = extractImageModel(values[0][0], prevDesktopImage.createdAt);
+        const mobileImageData  = extractImageModel(values[1][0], prevMobileImage.createdAt);
 
         const data:IHomeSlider = {
             header: req.body.header,
