@@ -7,7 +7,7 @@ import User from '../models/base/user.model'
 export const login = async (req: Request, res: Response) => {
     
     try{
-
+        await connect();
         const user = await User.findOne({ $or: [{email:req.body.email}, {phone: req.body.phone}]});
         
         if(!user) {
@@ -57,7 +57,7 @@ export const logout = async (req: Request, res: Response) => {
 export const signUp = async (req: Request, res: Response) =>{
 
     try{
-        connect();
+        await connect();
         const newUser: IUser = new User({
             name : req.body.name,
             username: req.body.username,
