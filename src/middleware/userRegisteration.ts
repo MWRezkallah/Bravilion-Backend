@@ -15,5 +15,4 @@ export const userRegister = async (req : Request, res : Response, next:any)=>{
     }else{
         next();
     }
-
 }

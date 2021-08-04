@@ -15,41 +15,6 @@ export class UserRepository extends Repository<IUser> implements IUserRepository
 
     collectionName = 'User';
 
-    validator = {
-            bsonType : "object",
-            required : ["name", "username", "email", "password", "phone"],
-            properties:{
-                name: {
-                    bsonType : "string"
-                },
-                username: {
-                    bsonType : "string"
-                },
-                email: {
-                    bsonType : "string"
-                },
-                password: {
-                    bsonType : "string"
-                },
-                phone: {
-                    bsonType : "string"
-                },
-                tokens:{
-                    bsonType: "array",
-                    items:{
-                        bsonType : "object",
-                        properties : {
-                            token:{bsonType : "string"}
-                        }
-                    }
-                }   
-            }
-        }
-
-    validationLevel = "strict";
-    
-    validationAction = "error" 
-
 
     async encrypPassword(password: string):Promise<string> {
             const salt = await bcrypt.genSalt(10);

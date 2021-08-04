@@ -23,7 +23,6 @@ export const createHomeSlider = async (req: Request, res: Response) => {
         const homeSliderRepo = new HomeSliderRepository();
 
         const values = Object.values(req.files !== undefined ? req.files: {});
-        console.log("=================>",values)
         const desktopImageData = extractImageModel(values[0][0]);
         const mobileImageData  = extractImageModel(values[1][0]);
 
