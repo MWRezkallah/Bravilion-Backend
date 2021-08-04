@@ -9,6 +9,7 @@ console.log(evParsed);
 import AuthRouter from './routes/auth.route';
 import HomeSliderRouter from './routes/homeSlider.route';
 import CategoriesRouter from './routes/category.route';
+import SupplierRouter from './routes/supplier.route';
 
 const app = express()
 const port = process.env.PORT || 8080
@@ -17,7 +18,7 @@ const port = process.env.PORT || 8080
 
 // parse application/json
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 
 app.get('/', (req:any, res:any) => {
     const date = new Date();
@@ -35,4 +36,5 @@ app.listen(port, () => console.log(`Example app listening at ${process.env.baseU
 
 app.use('/api/auth', AuthRouter);
 app.use('/api/home-slider', HomeSliderRouter);
-app.use('/api/categories', CategoriesRouter)
+app.use('/api/categories', CategoriesRouter);
+app.use('/api/suppliers', SupplierRouter);

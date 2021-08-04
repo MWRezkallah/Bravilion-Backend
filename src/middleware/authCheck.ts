@@ -14,9 +14,7 @@ export const authCheck = async (req: Request, res: Response, next:any) =>{
         if(!token) {throw new Error("Token is missing!")}
 
         const decoded = jwt.verify(token ,`${process.env.apiSecretKey}`, {complete : true}) as any;
-        console.log(decoded)
         const user = await User.findOne({"tokens.token":token});
-        console.log(user)
         if(!user) throw new Error("Invalid Token")
         
 

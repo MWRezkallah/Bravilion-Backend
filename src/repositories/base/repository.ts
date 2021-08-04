@@ -123,7 +123,7 @@ export class Repository<T> implements IRepository<T> {
     }
 
     async findAll(cleanUp?: boolean) {
-        console.log('invoked');
+        //console.log('invoked');
         if (!this.collection) {
             await this.initCollection();
         }
@@ -190,7 +190,7 @@ export class Repository<T> implements IRepository<T> {
         }
 
 
-        console.log(query);
+        //console.log(query);
 
         const result = await this.collection!.find(query).toArray();
 
