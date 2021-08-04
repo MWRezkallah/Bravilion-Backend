@@ -10,3 +10,7 @@ node_modules/
 
 # Environment variables file
 .env
+
+#ignore temp/tmp files like images
+tmp/
+temp/

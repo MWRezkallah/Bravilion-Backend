@@ -8,6 +8,7 @@ console.log(evParsed);
 
 import AuthRouter from './routes/auth.route';
 import HomeSliderRouter from './routes/homeSlider.route';
+import CategoriesRouter from './routes/category.route';
 
 const app = express()
 const port = process.env.PORT || 8080
@@ -33,4 +34,5 @@ app.listen(port, () => console.log(`Example app listening at ${process.env.baseU
 
 
 app.use('/api/auth', AuthRouter);
-app.use('/api/home-slider', HomeSliderRouter)
+app.use('/api/home-slider', HomeSliderRouter);
+app.use('/api/categories', CategoriesRouter)

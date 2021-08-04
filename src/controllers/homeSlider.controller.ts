@@ -1,33 +1,11 @@
 import { unlinkSync } from 'fs';
 import { Request, Response } from 'express'
 import { HomeSliderRepository } from '../repositories/HomeSliderRepository';
-import { IFile, IHomeSlider } from '../models';
+import { IHomeSlider } from '../models';
+
+import { extractImageModel } from '../lib/index';
 
 
-// const extractImageModel = (file:any):IFile =>{
-//     const createdAt = file.filename.slice(file.filename.indexOf('-')+1,file.filename.lastIndexOf('-')+1);
-//     const path  = file.path.split("\\").join("/");
-
-//     return {
-//         name:file.filename,
-//         type:file.mimetype,
-//         path:path,
-//         createdAt:Number.parseInt(createdAt),
-//         modifiedAt:Number.parseInt(createdAt)
-//     }
-// }
-
-
-const extractImageModel = (file:any, createdAt = Date.now()):IFile =>{
-
-    return {
-        name:file.filename,
-        type:file.mimetype,
-        path:file.path,
-        createdAt:createdAt,
-        modifiedAt: Date.now()
-    }
-}
 
 export const createHomeSlider = async (req: Request, res: Response) => {
     
