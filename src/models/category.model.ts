@@ -1,5 +1,4 @@
-import { IFile } from "./file.model";
-import { ILang } from "./language.model";
+import { IFile, ILang } from ".";
 
 
 export interface ICategory{

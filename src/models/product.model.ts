@@ -1,6 +1,4 @@
-import { IBadge } from "./badge.model";
-import { IFile } from "./file.model";
-import { ILang } from "./language.model";
+import { IBadge, IFile, ILang } from ".";
 
 
 export interface IProduct{
@@ -11,4 +9,5 @@ export interface IProduct{
     price:number;
     afterSalePrice?:number;
     badges?:IBadge[];
+    categories:string[];
 }

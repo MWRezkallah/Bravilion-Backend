@@ -1,4 +1,4 @@
-import { ILang } from "./ILang";
+import { ILang } from ".";
 
 export interface IContactInfo{
     address:ILang,

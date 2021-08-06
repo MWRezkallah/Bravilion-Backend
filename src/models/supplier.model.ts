@@ -1,6 +1,4 @@
-import { ILang } from "./ILang";
-import { IFile } from "./file.model";
-import { IContactInfo } from "./IContactInfo";
+import { ILang, IFile, IContactInfo } from ".";
 
 
 export interface ISupplier {

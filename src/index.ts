@@ -1,15 +1,12 @@
 
 import * as express from 'express';
 import * as cors from 'cors';
-
 import * as dotenv from 'dotenv';
 const evParsed = dotenv.config({path:"./src/.env"}); // run npm run start from parent directory
 console.log(evParsed);
 
-import AuthRouter from './routes/auth.route';
-import HomeSliderRouter from './routes/homeSlider.route';
-import CategoriesRouter from './routes/category.route';
-import SupplierRouter from './routes/supplier.route';
+import {AuthRouter, HomeSliderRouter, CategoriesRouter, SupplierRouter, BadgeRouter} from './routes';
+
 
 const app = express()
 const port = process.env.PORT || 8080
@@ -38,3 +35,4 @@ app.use('/api/auth', AuthRouter);
 app.use('/api/home-slider', HomeSliderRouter);
 app.use('/api/categories', CategoriesRouter);
 app.use('/api/suppliers', SupplierRouter);
+app.use('/api/badges', BadgeRouter);

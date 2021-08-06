@@ -1,2 +1,6 @@
 export * from './base'
 export * from './UserRepository'
+export * from './SupplierRepository'
+export * from './HomeSliderRepository'
+export * from './badgeRepository'
+export * from './categoryRepository'

@@ -1,4 +1,4 @@
-import { ILang } from "./language.model";
+import { ILang } from ".";
 
 
 export interface IBadge{
