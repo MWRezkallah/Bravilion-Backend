@@ -19,7 +19,7 @@ export const storage =  (fileDestination:string) => {
 
 export const imageFilter = (req : any, file: any, cb : any ) => {
 
-    const allowedFormats = /jpg|jpeg|png|gif/i ;
+    const allowedFormats = /jpg|jpeg|png|gif|svg/i ;
     const mimeType = allowedFormats.test(file.mimetype);
     const userExtension = allowedFormats.test(path.extname(file.originalname));
 

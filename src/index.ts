@@ -5,7 +5,7 @@ import * as dotenv from 'dotenv';
 const evParsed = dotenv.config({path:"./src/.env"}); // run npm run start from parent directory
 console.log(evParsed);
 
-import {AuthRouter, HomeSliderRouter, CategoriesRouter, SupplierRouter, BadgeRouter} from './routes';
+import {AuthRouter, HomeSliderRouter, CategoriesRouter, SupplierRouter, BadgeRouter, ProductRouter} from './routes';
 
 
 const app = express()
@@ -36,3 +36,4 @@ app.use('/api/home-slider', HomeSliderRouter);
 app.use('/api/categories', CategoriesRouter);
 app.use('/api/suppliers', SupplierRouter);
 app.use('/api/badges', BadgeRouter);
+app.use('/api/products', ProductRouter);
