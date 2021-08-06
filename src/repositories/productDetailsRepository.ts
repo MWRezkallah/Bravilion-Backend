@@ -1,10 +1,10 @@
 import { ObjectId } from "mongodb";
 import { IRepository, Repository } from ".";
-import { IProduct } from "../models/product.model";
+import { IProductDetails } from "../models/productDetails.model";
 
-export class ProductRepository extends Repository<IProduct> implements IRepository<IProduct> {
+export class ProductDetailsRepository extends Repository<IProductDetails> implements IRepository<IProductDetails> {
 
-    collectionName="Product";
+    collectionName="ProductDetails";
     constructor(){
         super();
     }
@@ -30,6 +30,14 @@ export class ProductRepository extends Repository<IProduct> implements IReposito
                     localField:"categories",
                     foreignField:"_id",
                     as:"categoryInfo"
+                }
+            },
+            {
+                $lookup:{
+                    from:"Supplier",
+                    localField:"suppliers",
+                    foreignField:"_id",
+                    as: "supplierInfo"
                 }
             },
             {
@@ -63,6 +71,14 @@ export class ProductRepository extends Repository<IProduct> implements IReposito
                     localField:"categories",
                     foreignField:"_id",
                     as:"categoryInfo"
+                }
+            },
+            {
+                $lookup:{
+                    from:"Supplier",
+                    localField:"suppliers",
+                    foreignField:"_id",
+                    as: "supplierInfo"
                 }
             }
         ]).toArray();
