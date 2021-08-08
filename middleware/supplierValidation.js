@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.supplierUpdateValidator = exports.supplierCreationValidator = void 0;
 const SupplierRepository_1 = require("../repositories/SupplierRepository");
 const lib_1 = require("../lib");
-const fs_1 = require("fs");
+const Storage = require("@google-cloud/storage");
 const mongodb_1 = require("mongodb");
 const supplierCreationValidator = async (req, res, next) => {
     try {
@@ -22,7 +22,8 @@ const supplierCreationValidator = async (req, res, next) => {
     catch (error) {
         const values = Object.values(req.files !== undefined ? req.files : {});
         const logoImage = lib_1.extractImageModel(values[0][0]);
-        fs_1.unlinkSync(logoImage.path);
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(logoImage.name).delete();
         res.status(400).send({
             status: "Error",
             Error: error.message
@@ -52,7 +53,8 @@ const supplierUpdateValidator = async (req, res, next) => {
     catch (error) {
         const values = Object.values(req.files !== undefined ? req.files : {});
         const logoImage = lib_1.extractImageModel(values[0][0]);
-        fs_1.unlinkSync(logoImage.path);
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(logoImage.name).delete();
         res.status(400).send({
             status: "Error",
             Error: error.message

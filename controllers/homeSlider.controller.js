@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteHomeSlider = exports.updateHomeSlider = exports.getHomeSlider = exports.getAllHomeSliders = exports.createHomeSlider = void 0;
-const fs_1 = require("fs");
 const HomeSliderRepository_1 = require("../repositories/HomeSliderRepository");
 const Storage = require("@google-cloud/storage");
 const index_1 = require("../lib/index");
@@ -76,8 +75,9 @@ const updateHomeSlider = async (req, res) => {
         // unlinkSync(prevMobileImage);
         const prevDesktopImage = slider.desktopImage;
         const prevMobileImage = slider.mobileImage;
-        fs_1.unlinkSync(prevDesktopImage.path);
-        fs_1.unlinkSync(prevMobileImage.path);
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevDesktopImage.name).delete();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevMobileImage.name).delete();
         const values = Object.values(req.files !== undefined ? req.files : {});
         // const desktopImageData = extractImageModel(values[0][0]);
         // const mobileImageData  = extractImageModel(values[1][0]);

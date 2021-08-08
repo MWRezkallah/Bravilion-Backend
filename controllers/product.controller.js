@@ -4,7 +4,7 @@ exports.deleteProduct = exports.updateProduct = exports.getProduct = exports.get
 const repositories_1 = require("../repositories");
 const lib_1 = require("../lib");
 const mongodb_1 = require("mongodb");
-const fs_1 = require("fs");
+const Storage = require("@google-cloud/storage");
 const createProduct = async (req, res) => {
     try {
         const values = Object.values(req.files !== undefined ? req.files : {});
@@ -151,8 +151,9 @@ const updateProduct = async (req, res) => {
         const product = await productRepo.findOneByQuery({ productDetailsId: productItem.productDetailsId });
         await productRepo.update(product._id, productItem);
         //if updated delete old images
-        fs_1.unlinkSync(productDetails.logo.path);
-        Array.from(productDetails.images).forEach(image => fs_1.unlinkSync(lib_1.extractImageModel(image).path));
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(productDetails.logo.name).delete();
+        Array.from(productDetails.images).forEach(async (image) => await storage.bucket(`${process.env.GCS_BUCKET}`).file(image.name).delete());
         res.status(200).send({
             status: "Success",
             data: updatedProductDetails,
@@ -160,8 +161,9 @@ const updateProduct = async (req, res) => {
     }
     catch (error) {
         const values = Object.values(req.files !== undefined ? req.files : {});
-        fs_1.unlinkSync(lib_1.extractImageModel(values[0][0]).path);
-        Array.from(values[1]).forEach(image => fs_1.unlinkSync(lib_1.extractImageModel(image).path));
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(lib_1.extractImageModel(values[0][0]).name).delete();
+        Array.from(values[1]).forEach(async (image) => await storage.bucket(`${process.env.GCS_BUCKET}`).file(lib_1.extractImageModel(image).name).delete());
         res.status(400).send({
             status: "Error",
             message: error.message
@@ -177,8 +179,9 @@ const deleteProduct = async (req, res) => {
         const productRepo = new repositories_1.ProductRepository();
         await productRepo.deleteByQuery({ productDetailsId: productDetails._id });
         //if product is deleted, so we will delete its images
-        fs_1.unlinkSync(productDetails.logo.path);
-        Array.from(productDetails.images).forEach(image => fs_1.unlinkSync(lib_1.extractImageModel(image).path));
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(productDetails.logo.name).delete();
+        Array.from(productDetails.images).forEach(async (image) => await storage.bucket(`${process.env.GCS_BUCKET}`).file(image.name).delete());
         res.status(200).send({
             status: "success",
             message: `${productDetails.name.english} deleted successfully!`

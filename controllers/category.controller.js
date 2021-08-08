@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCategory = exports.updateCategory = exports.getCategory = exports.getAllCategories = exports.createCategory = void 0;
-const fs_1 = require("fs");
 const categoryRepository_1 = require("../repositories/categoryRepository");
 const lib_1 = require("../lib");
+const Storage = require("@google-cloud/storage");
 const createCategory = async (req, res) => {
     try {
         const CategoryRepo = new categoryRepository_1.CategoryRepository();
@@ -70,7 +70,8 @@ const updateCategory = async (req, res) => {
         const _id = req.params.id;
         const category = await CategoryRepo.findOne(_id);
         const prevCoverImage = category.cover;
-        fs_1.unlinkSync(prevCoverImage.path);
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevCoverImage.name).delete();
         const values = Object.values(req.files !== undefined ? req.files : {});
         const coverImageData = lib_1.extractImageModel(values[0][0], prevCoverImage.createdAt);
         const data = {
@@ -99,8 +100,9 @@ const deleteCategory = async (req, res) => {
         const CategoryRepo = new categoryRepository_1.CategoryRepository();
         const _id = req.params.id;
         const category = await CategoryRepo.findOne(_id);
-        const prevCoverImage = category.cover.path;
-        fs_1.unlinkSync(prevCoverImage);
+        const prevCoverImage = category.cover.name;
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevCoverImage).delete();
         await CategoryRepo.delete(_id);
         res.status(200).send({
             status: 'successfully delete',

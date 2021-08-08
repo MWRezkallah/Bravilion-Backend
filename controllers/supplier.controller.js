@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteSupplier = exports.updateSupplier = exports.getSupplier = exports.getAllSuppliers = exports.createSupplier = void 0;
 const SupplierRepository_1 = require("../repositories/SupplierRepository");
 const lib_1 = require("../lib");
-const fs_1 = require("fs");
+const Storage = require("@google-cloud/storage");
 const createSupplier = async (req, res) => {
     try {
         const values = Object.values(req.files !== undefined ? req.files : {});
@@ -100,7 +100,8 @@ const updateSupplier = async (req, res) => {
         const updatedSupplier = await supplierRepo.update(supplierId, data);
         // if updated without error the old logo will be deleted
         const prevLogo = supplier.logo;
-        fs_1.unlinkSync(prevLogo.path);
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevLogo.name).delete();
         res.status(200).send({
             status: "success!",
             data: updatedSupplier
@@ -120,7 +121,8 @@ const deleteSupplier = async (req, res) => {
         const supplierRepo = new SupplierRepository_1.SupplierRepository();
         const supplier = await supplierRepo.findOne(supplierId);
         await supplierRepo.delete(supplierId);
-        fs_1.unlinkSync(supplier.logo.path);
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(supplier.logo.name).delete();
         res.status(200).send({
             status: "success",
             message: `${supplier.name.english} deleted successfully!`
