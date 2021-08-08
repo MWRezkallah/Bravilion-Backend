@@ -1,5 +1,5 @@
 node_modules/
-g.env
+.env
 my-uploads/
 app.yaml
 multer-storage-service-account-key.json

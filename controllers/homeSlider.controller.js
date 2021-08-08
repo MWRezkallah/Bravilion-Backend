@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteHomeSlider = exports.updateHomeSlider = exports.getHomeSlider = exports.getAllHomeSliders = exports.createHomeSlider = void 0;
 const fs_1 = require("fs");
 const HomeSliderRepository_1 = require("../repositories/HomeSliderRepository");
+const Storage = require("@google-cloud/storage");
 const index_1 = require("../lib/index");
 const createHomeSlider = async (req, res) => {
     try {
@@ -107,10 +108,11 @@ const deleteHomeSlider = async (req, res) => {
         const homeSliderRepo = new HomeSliderRepository_1.HomeSliderRepository();
         const _id = req.params.id;
         const slider = await homeSliderRepo.findOne(_id);
-        const prevDesktopImage = slider.desktopImage.path;
-        const prevMobileImage = slider.mobileImage.path;
-        fs_1.unlinkSync(prevDesktopImage);
-        fs_1.unlinkSync(prevMobileImage);
+        const prevDesktopImage = slider.desktopImage.name;
+        const prevMobileImage = slider.mobileImage.name;
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevDesktopImage).delete();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevMobileImage).delete();
         await homeSliderRepo.delete(_id);
         res.status(200).send({
             status: 'successfully delete',
