@@ -14,3 +14,4 @@ node_modules/
 #ignore temp/tmp files like images
 tmp/
 temp/
+dist/

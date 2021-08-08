@@ -1,6 +1,5 @@
 import {Request, Response} from 'express';
 import { BadgeRepository } from '../repositories';
-import { IBadge } from '../models';
 import { ObjectId } from 'mongodb';
 
 

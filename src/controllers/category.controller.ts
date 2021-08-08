@@ -1,9 +1,8 @@
-import { unlinkSync } from 'fs';
 import { Request, Response } from 'express'
 import { CategoryRepository } from '../repositories/categoryRepository';
 import { ICategory } from '../models';
 import { extractImageModel } from '../lib';
-
+import * as Storage from '@google-cloud/storage';
 
 
 
@@ -84,7 +83,9 @@ export const updateCategory = async (req: Request, res: Response) => {
 
 
         const prevCoverImage = category.cover;
-        unlinkSync(prevCoverImage.path);
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevCoverImage.name).delete();
+
 
 
         const values = Object.values(req.files !== undefined ? req.files: {});
@@ -121,8 +122,10 @@ export const deleteCategory = async (req: Request, res: Response) => {
         const _id = req.params.id;
         const category:any = await CategoryRepo.findOne(_id);
         
-        const prevCoverImage = category.cover.path;
-        unlinkSync(prevCoverImage);
+        const prevCoverImage = category.cover.name;
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevCoverImage).delete();
+
         
         await CategoryRepo.delete(_id);
     

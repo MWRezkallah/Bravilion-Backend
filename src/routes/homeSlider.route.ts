@@ -6,7 +6,7 @@ import { imageFilter, storage } from '../lib/multer';
 import { createHomeSlider, deleteHomeSlider, getAllHomeSliders, getHomeSlider, updateHomeSlider } from '../controllers';
 
 
-const upload = multer({ storage: storage(`${process.env.multerStorage}`), fileFilter: imageFilter } );
+const upload = multer({ storage: storage(`${process.env.savingHomeSliderImagePath}`), fileFilter: imageFilter } );
 
 // eslint-disable-next-line new-cap
 const router = Router();

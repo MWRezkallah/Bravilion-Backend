@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { SupplierRepository } from "../repositories/SupplierRepository";
 import { extractImageModel } from '../lib';
-import { unlinkSync } from 'fs';
+import * as Storage from '@google-cloud/storage';
 import { ObjectId } from 'mongodb';
 
 export const supplierCreationValidator = async (req: Request, res: Response, next:any) => {
@@ -30,7 +30,8 @@ export const supplierCreationValidator = async (req: Request, res: Response, nex
         
         const values = Object.values(req.files !== undefined ? req.files: {});
         const logoImage = extractImageModel(values[0][0]);
-        unlinkSync(logoImage.path);
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(logoImage.name).delete();
 
         res.status(400).send({
             status : "Error",
@@ -73,7 +74,10 @@ export const supplierUpdateValidator = async (req: Request, res: Response, next:
         
         const values = Object.values(req.files !== undefined ? req.files: {});
         const logoImage = extractImageModel(values[0][0]);
-        unlinkSync(logoImage.path);
+
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(logoImage.name).delete();
+
 
         res.status(400).send({
             status : "Error",

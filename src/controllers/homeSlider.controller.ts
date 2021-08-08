@@ -1,8 +1,7 @@
-import { unlinkSync } from 'fs';
 import { Request, Response } from 'express'
 import { HomeSliderRepository } from '../repositories/HomeSliderRepository';
 import { IHomeSlider } from '../models';
-
+import * as Storage from '@google-cloud/storage';
 import { extractImageModel } from '../lib/index';
 
 
@@ -90,8 +89,10 @@ export const updateHomeSlider = async (req: Request, res: Response) => {
 
         const prevDesktopImage = slider.desktopImage;
         const prevMobileImage  = slider.mobileImage;
-        unlinkSync(prevDesktopImage.path);
-        unlinkSync(prevMobileImage.path);
+
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevDesktopImage.name).delete();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevMobileImage.name).delete()
 
 
         const values = Object.values(req.files !== undefined ? req.files: {});
@@ -130,10 +131,13 @@ export const deleteHomeSlider = async (req: Request, res: Response) => {
         const _id = req.params.id;
         const slider:any = await homeSliderRepo.findOne(_id);
         
-        const prevDesktopImage = slider.desktopImage.path;
-        const prevMobileImage  = slider.mobileImage.path;
-        unlinkSync(prevDesktopImage);
-        unlinkSync(prevMobileImage);
+        const prevDesktopImage = slider.desktopImage.name;
+        const prevMobileImage  = slider.mobileImage.name;
+        
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevDesktopImage).delete();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevMobileImage).delete()
+
         
         await homeSliderRepo.delete(_id);
     

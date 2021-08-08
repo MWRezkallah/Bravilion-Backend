@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { SupplierRepository } from "../repositories/SupplierRepository";
 import { extractImageModel } from '../lib';
 import { ISupplier } from "../models/supplier.model";
-import { unlinkSync } from "fs";
+import * as Storage from '@google-cloud/storage';
 
 export const createSupplier = async (req: Request, res: Response) => {
 
@@ -121,7 +121,9 @@ export const updateSupplier = async (req: Request, res: Response) => {
 
         // if updated without error the old logo will be deleted
         const prevLogo = supplier.logo;
-        unlinkSync(prevLogo.path);
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevLogo.name).delete();
+
         
         res.status(200).send({
             status: "success!",
@@ -146,7 +148,10 @@ export const deleteSupplier = async (req: Request, res: Response) => {
         const supplierRepo = new SupplierRepository();
         const supplier = await supplierRepo.findOne(supplierId);
         await supplierRepo.delete(supplierId);
-        unlinkSync(supplier.logo.path);
+
+        const storage = new Storage();
+        await storage.bucket(`${process.env.GCS_BUCKET}`).file(supplier.logo.name).delete();
+
 
         res.status(200).send({
             status:"success",
