@@ -4,3 +4,4 @@ my-uploads/
 app.yaml
 multer-storage-service-account-key.json
 .gcloudignore
+browser/

@@ -20,10 +20,12 @@ app.use('/api/categories', routes_1.CategoriesRouter);
 app.use('/api/suppliers', routes_1.SupplierRouter);
 app.use('/api/badges', routes_1.BadgeRouter);
 app.use('/api/products', routes_1.ProductRouter);
+app.use('/api/topCategory', routes_1.TopCategoryRouter);
 app.use(helmet());
 app.use(compression());
+app.use(express.static(`${process.env.multerStorage}`));
 app.use(express.static('browser'));
 app.get(/.*/, (req, res) => {
-    res.sendFile('browser/index.html',{root:__dirname});
+    res.sendFile('browser/index.html', { root: __dirname });
 });
 //# sourceMappingURL=index.js.map

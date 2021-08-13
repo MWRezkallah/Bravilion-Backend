@@ -13,4 +13,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./homeSlider.controller"), exports);
 __exportStar(require("./category.controller"), exports);
 __exportStar(require("./badge.controller"), exports);
+__exportStar(require("./topCategory.controller"), exports);
 //# sourceMappingURL=index.js.map

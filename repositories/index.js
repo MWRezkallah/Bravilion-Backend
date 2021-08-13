@@ -18,4 +18,5 @@ __exportStar(require("./badgeRepository"), exports);
 __exportStar(require("./categoryRepository"), exports);
 __exportStar(require("./productDetailsRepository"), exports);
 __exportStar(require("./productRepository"), exports);
+__exportStar(require("./topCategoryRepository"), exports);
 //# sourceMappingURL=index.js.map
