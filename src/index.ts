@@ -7,7 +7,7 @@ import * as cors from 'cors';
 import * as helmet from 'helmet';
 import * as compression from 'compression';
 
-import {AuthRouter, HomeSliderRouter, CategoriesRouter, SupplierRouter, BadgeRouter, ProductRouter} from './routes';
+import {AuthRouter, HomeSliderRouter, CategoriesRouter, SupplierRouter, BadgeRouter, ProductRouter, TopCategoryRouter} from './routes';
 
 
 const app = express()
@@ -30,6 +30,7 @@ app.use('/api/categories', CategoriesRouter);
 app.use('/api/suppliers', SupplierRouter);
 app.use('/api/badges', BadgeRouter);
 app.use('/api/products', ProductRouter);
+app.use('/api/topCategory', TopCategoryRouter)
 app.use(helmet());
 app.use(compression());
 app.use(express.static(`${process.env.multerStorage}`));
