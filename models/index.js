@@ -23,4 +23,5 @@ __exportStar(require("./productDetails.model"), exports);
 __exportStar(require("./IContactInfo"), exports);
 __exportStar(require("./supplier.model"), exports);
 __exportStar(require("./topCategory.model"), exports);
+__exportStar(require("./service.model"), exports);
 //# sourceMappingURL=index.js.map

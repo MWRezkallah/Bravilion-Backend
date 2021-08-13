@@ -19,4 +19,5 @@ __exportStar(require("./categoryRepository"), exports);
 __exportStar(require("./productDetailsRepository"), exports);
 __exportStar(require("./productRepository"), exports);
 __exportStar(require("./topCategoryRepository"), exports);
+__exportStar(require("./serviceRepository"), exports);
 //# sourceMappingURL=index.js.map

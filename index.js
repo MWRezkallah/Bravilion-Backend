@@ -21,6 +21,7 @@ app.use('/api/suppliers', routes_1.SupplierRouter);
 app.use('/api/badges', routes_1.BadgeRouter);
 app.use('/api/products', routes_1.ProductRouter);
 app.use('/api/topCategory', routes_1.TopCategoryRouter);
+app.use('/api/service', routes_1.ServiceRouter);
 app.use(helmet());
 app.use(compression());
 app.use(express.static(`${process.env.multerStorage}`));

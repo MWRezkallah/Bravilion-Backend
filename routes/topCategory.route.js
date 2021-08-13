@@ -2,7 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const controllers_1 = require("../controllers");
+const multer = require("multer");
+const formDataParser = multer();
 const router = express_1.Router();
+router.use(formDataParser.none());
 router.post('/create-top-category', controllers_1.createTopCategory);
 router.get('/get-top-categories', controllers_1.getTopCategories);
 router.get('/get-top-category/:id', controllers_1.getTopCategory);
