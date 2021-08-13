@@ -19,16 +19,6 @@ const port = process.env.PORT || 8080
 app.use(express.json());
 app.use(cors());
 
-app.get('/', (req:any, res:any) => {
-    const date = new Date();
-    const hours = (date.getHours() % 12) + 1; // London is UTC + 1hr;
-    console.log("===========> Hello")
-    res.json({
-        bongs: 'BONG '.repeat(hours),
-        status: "successful deployment to gcloud!"
-    });
-})
-
     
 app.listen(port, () => console.log(`Example app listening at ${process.env.baseUrl}:${port}`))
 
@@ -43,3 +33,7 @@ app.use('/api/products', ProductRouter);
 app.use(helmet());
 app.use(compression());
 app.use(express.static(`${process.env.multerStorage}`));
+app.use(express.static('browser'));
+app.get(/.*/, (req, res) => {
+    res.sendFile('browser/index.html',{root:__dirname});
+});

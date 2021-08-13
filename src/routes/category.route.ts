@@ -10,10 +10,10 @@ const upload = multer({ storage: storage(`${process.env.savingCategoryImagesPath
 // eslint-disable-next-line new-cap
 const router = Router();
 
-router.post('/create-category', upload.fields([{name: 'coverImage',maxCount: 1}]) , createCategory);
+router.post('/create-category', upload.fields([{name: 'coverImage',maxCount: 1}, {name:'icon', maxCount:1}]) , createCategory);
 router.get('/get-categories', getAllCategories)
 router.get('/get-category/:id', getCategory)
-router.put('/update-category/:id', upload.fields([{name: 'coverImage',maxCount: 1}]) , updateCategory);
+router.put('/update-category/:id', upload.fields([{name: 'coverImage',maxCount: 1}, {name:'icon', maxCount:1}]) , updateCategory);
 router.delete('/delete-category/:id', deleteCategory)
 
 
