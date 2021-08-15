@@ -32,10 +32,13 @@ app.use('/api/badges', BadgeRouter);
 app.use('/api/products', ProductRouter);
 app.use('/api/topCategory', TopCategoryRouter);
 app.use('/api/service', ServiceRouter);
-app.use(helmet());
+// app.use(helmet());
 app.use(compression());
-app.use(express.static(`${process.env.multerStorage}`));
-app.use(express.static('browser'));
-app.get(/.*/, (req, res) => {
-    res.sendFile('browser/index.html',{root:__dirname});
-});
+// app.get('/testDocker', (req, res)=>{
+//     console.log("docker connected");
+//     console.log(process.env)
+//     res.send({
+//         status:"success",
+//         message:"docker work just fine!"
+//     })
+// });
