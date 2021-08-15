@@ -16,3 +16,6 @@ tmp/
 temp/
 dist/
 src/multer-storage-service-account-key.json
+
+Dockerfile
+.dockerignore
