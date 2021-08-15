@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const cors = require("cors");
-// import * as dotenv from 'dotenv';
-// const evParsed = dotenv.config({path:"./src/.env"}); // run npm run start from parent directory
+// const dotenv = require('dotenv');
+// const evParsed = dotenv.config({path:"./.env"}); // run npm run start from parent directory
 // console.log(evParsed);
 const helmet = require("helmet");
 const compression = require("compression");
@@ -22,9 +22,9 @@ app.use('/api/badges', routes_1.BadgeRouter);
 app.use('/api/products', routes_1.ProductRouter);
 app.use('/api/topCategory', routes_1.TopCategoryRouter);
 app.use('/api/service', routes_1.ServiceRouter);
-app.use(helmet());
+// app.use(helmet({contentSecurityPolicy: false}));
 app.use(compression());
-app.use(express.static(`${process.env.multerStorage}`));
+// app.use(express.static(`${process.env.multerStoragcloge}`));
 app.use(express.static('browser'));
 app.get(/.*/, (req, res) => {
     res.sendFile('browser/index.html', { root: __dirname });
