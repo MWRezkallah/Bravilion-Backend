@@ -3,6 +3,7 @@ import { CategoryRepository } from '../repositories/categoryRepository';
 import { ICategory } from '../models';
 import { extractImageModel } from '../lib';
 import * as Storage from '@google-cloud/storage';
+import { ObjectId } from 'bson';
 
 
 
@@ -20,16 +21,19 @@ export const createCategory = async (req: Request, res: Response) => {
                 english: req.body.englishName
             },
             cover: coverImageData,
-            icon: iconImage   
+            icon: iconImage,
+            level:req.body.level || 0
         }
-
         const re = await CategoryRepo.create(data);
-        
+        const subCategories = (req.body.subCategories as Array<string>).map(category => new ObjectId(category))
+        const filter = {"_id":{$in:subCategories}}
+        const updateDocs = {$addToSet:{"parentCategoryId":new ObjectId(re)}}
+        const cat = await CategoryRepo.collection?.updateMany(filter, updateDocs)
 
     
         res.status(200).send({
             status: 'success',
-            data: re
+            data: re,
         });
     }catch(e){
         res.status(400).send({
@@ -42,10 +46,10 @@ export const getAllCategories = async (req: Request, res: Response) => {
     try{
         const CategoryRepo = new CategoryRepository();
 
-        const categories = await CategoryRepo.findAll();
+        const categories = await CategoryRepo.getCategories();
         res.status(200).send({
             status: 'success',
-            data: categories
+            data: categories,
         });
     }catch(e){
         res.status(400).send({
@@ -60,11 +64,11 @@ export const getCategory = async (req: Request, res: Response) => {
     try{
         const CategoryRepo = new CategoryRepository();
         const _id = req.params.id;
-        const slider = await CategoryRepo.findOne(_id);
+        const category = await CategoryRepo.getCategory(_id)
     
         res.status(200).send({
             status: 'success',
-            data: slider
+            data: category,
         });
     }catch(e){
         res.status(400).send({
@@ -104,12 +108,24 @@ export const updateCategory = async (req: Request, res: Response) => {
                 english: req.body.englishName
             },
             cover: coverImageData,
-            icon: iconImage  
-
+            icon: iconImage,
+            level: category.level || req.body.level || 0
         }
         
-        const re = await CategoryRepo.update(_id,data);
-        
+        let re = await CategoryRepo.update(_id,data);
+        if (req.body.subCategories !== undefined ){
+            const subCategories = (req.body.subCategories as Array<string>).map(category => new ObjectId(category))
+            const filter = {"_id":{$in:subCategories}}
+            const updateDocs = {$addToSet:{"parentCategoryId":new ObjectId(_id)}}
+            let cat = await CategoryRepo.collection?.updateMany(filter, updateDocs)
+            cat = await CategoryRepo.collection?.updateMany(
+                {$and:[
+                    {"_id":{$nin:subCategories}},
+                    {"parentCategoryId":new ObjectId(_id)}
+                ]},
+                {$pull:{"parentCategoryId":new ObjectId(_id)}}                
+            ) 
+        }
 
     
         res.status(200).send({
@@ -139,6 +155,7 @@ export const deleteCategory = async (req: Request, res: Response) => {
 
         
         await CategoryRepo.delete(_id);
+        await CategoryRepo.collection?.updateMany({"parentCategoryId":new ObjectId(_id)}, {$pull:{"parentCategoryId":new ObjectId(_id)}})
     
         res.status(200).send({
             status: 'successfully delete',

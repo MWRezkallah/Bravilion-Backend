@@ -6,4 +6,6 @@ export interface ICategory{
     name:ILang;
     cover:IFile;
     icon: IFile;
+    parentCategoryId?:string[]
+    level?:number
 }

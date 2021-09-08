@@ -1,10 +1,10 @@
 
 import * as express from 'express';
 import * as cors from 'cors';
-// import * as dotenv from 'dotenv';
-// const evParsed = dotenv.config({path:"./src/.env"}); // run npm run start from parent directory
-// console.log(evParsed);
-import * as helmet from 'helmet';
+import * as dotenv from 'dotenv';
+const evParsed = dotenv.config({path:"./src/.env"}); // run npm run start from parent directory
+console.log(evParsed);
+// import * as helmet from 'helmet';
 import * as compression from 'compression';
 
 import {AuthRouter, HomeSliderRouter, CategoriesRouter, SupplierRouter, BadgeRouter, ProductRouter, TopCategoryRouter, ServiceRouter} from './routes';
@@ -42,3 +42,7 @@ app.use(compression());
 //         message:"docker work just fine!"
 //     })
 // });
+app.use(express.static('browser'));
+app.get(/.*/, (req, res) => {
+    res.sendFile('browser/index.html', { root: __dirname });
+});
