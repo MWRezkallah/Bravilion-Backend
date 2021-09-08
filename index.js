@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const cors = require("cors");
-// const dotenv = require('dotenv');
-// const evParsed = dotenv.config({path:"./.env"}); // run npm run start from parent directory
+// import * as dotenv from 'dotenv';
+// const evParsed = dotenv.config({path:"./src/.env"}); // run npm run start from parent directory
 // console.log(evParsed);
-const helmet = require("helmet");
+// import * as helmet from 'helmet';
 const compression = require("compression");
 const routes_1 = require("./routes");
 const app = express();
@@ -22,9 +22,16 @@ app.use('/api/badges', routes_1.BadgeRouter);
 app.use('/api/products', routes_1.ProductRouter);
 app.use('/api/topCategory', routes_1.TopCategoryRouter);
 app.use('/api/service', routes_1.ServiceRouter);
-// app.use(helmet({contentSecurityPolicy: false}));
+// app.use(helmet());
 app.use(compression());
-// app.use(express.static(`${process.env.multerStoragcloge}`));
+// app.get('/testDocker', (req, res)=>{
+//     console.log("docker connected");
+//     console.log(process.env)
+//     res.send({
+//         status:"success",
+//         message:"docker work just fine!"
+//     })
+// });
 app.use(express.static('browser'));
 app.get(/.*/, (req, res) => {
     res.sendFile('browser/index.html', { root: __dirname });
