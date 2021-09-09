@@ -16,4 +16,5 @@ __exportStar(require("./badge.controller"), exports);
 __exportStar(require("./topCategory.controller"), exports);
 __exportStar(require("./service.controller"), exports);
 __exportStar(require("./homePage.controller"), exports);
+__exportStar(require("./plan.controller"), exports);
 //# sourceMappingURL=index.js.map

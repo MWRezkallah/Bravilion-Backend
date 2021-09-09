@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HomePageRouter = exports.ServiceRouter = exports.TopCategoryRouter = exports.ProductRouter = exports.SupplierRouter = exports.HomeSliderRouter = exports.CategoriesRouter = exports.BadgeRouter = exports.AuthRouter = void 0;
+exports.PlanRouter = exports.HomePageRouter = exports.ServiceRouter = exports.TopCategoryRouter = exports.ProductRouter = exports.SupplierRouter = exports.HomeSliderRouter = exports.CategoriesRouter = exports.BadgeRouter = exports.AuthRouter = void 0;
 var auth_route_1 = require("./auth.route");
 Object.defineProperty(exports, "AuthRouter", { enumerable: true, get: function () { return auth_route_1.default; } });
 var badge_route_1 = require("./badge.route");
@@ -19,4 +19,6 @@ var service_route_1 = require("./service.route");
 Object.defineProperty(exports, "ServiceRouter", { enumerable: true, get: function () { return service_route_1.default; } });
 var homePage_route_1 = require("./homePage.route");
 Object.defineProperty(exports, "HomePageRouter", { enumerable: true, get: function () { return homePage_route_1.default; } });
+var plan_route_1 = require("./plan.route");
+Object.defineProperty(exports, "PlanRouter", { enumerable: true, get: function () { return plan_route_1.default; } });
 //# sourceMappingURL=index.js.map

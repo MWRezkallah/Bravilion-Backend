@@ -25,4 +25,5 @@ __exportStar(require("./supplier.model"), exports);
 __exportStar(require("./topCategory.model"), exports);
 __exportStar(require("./service.model"), exports);
 __exportStar(require("./homePage.model"), exports);
+__exportStar(require("./plan.model"), exports);
 //# sourceMappingURL=index.js.map

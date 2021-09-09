@@ -23,6 +23,7 @@ app.use('/api/products', routes_1.ProductRouter);
 app.use('/api/topCategory', routes_1.TopCategoryRouter);
 app.use('/api/service', routes_1.ServiceRouter);
 app.use('/api/homePage', routes_1.HomePageRouter);
+app.use('/api/plan', routes_1.PlanRouter);
 // app.use(helmet());
 app.use(compression());
 // app.get('/testDocker', (req, res)=>{
