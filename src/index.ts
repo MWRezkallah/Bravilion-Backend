@@ -7,7 +7,7 @@ console.log(evParsed);
 // import * as helmet from 'helmet';
 import * as compression from 'compression';
 
-import {AuthRouter, HomeSliderRouter, CategoriesRouter, SupplierRouter, BadgeRouter, ProductRouter, TopCategoryRouter, ServiceRouter} from './routes';
+import {AuthRouter, HomeSliderRouter, CategoriesRouter, SupplierRouter, BadgeRouter, ProductRouter, TopCategoryRouter, ServiceRouter, HomePageRouter} from './routes';
 
 
 const app = express()
@@ -32,6 +32,7 @@ app.use('/api/badges', BadgeRouter);
 app.use('/api/products', ProductRouter);
 app.use('/api/topCategory', TopCategoryRouter);
 app.use('/api/service', ServiceRouter);
+app.use('/api/homePage', HomePageRouter)
 // app.use(helmet());
 app.use(compression());
 // app.get('/testDocker', (req, res)=>{
