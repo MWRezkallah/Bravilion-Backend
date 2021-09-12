@@ -29,3 +29,17 @@ export const imageFilter = (req : any, file: any, cb : any ) => {
     }
 
 }
+
+export const pdfFilter = (req : any, file: any, cb : any ) => {
+
+    const allowedFormats = /pdf|pptx|doc|docx/i ;
+    const mimeType = allowedFormats.test(file.mimetype);
+    const userExtension = allowedFormats.test(path.extname(file.originalname));
+
+    if( mimeType && userExtension){
+        cb(null, true);
+    }else{
+        cb(null, false);
+    }
+
+}
