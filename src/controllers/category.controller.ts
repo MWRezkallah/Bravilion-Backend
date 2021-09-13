@@ -25,10 +25,12 @@ export const createCategory = async (req: Request, res: Response) => {
             level:req.body.level || 0
         }
         const re = await CategoryRepo.create(data);
-        const subCategories = (req.body.subCategories as Array<string>).map(category => new ObjectId(category))
-        const filter = {"_id":{$in:subCategories}}
-        const updateDocs = {$addToSet:{"parentCategoryId":new ObjectId(re)}}
-        const cat = await CategoryRepo.collection?.updateMany(filter, updateDocs)
+        if(req.body.parentCategories){
+            const parentCategories = (req.body.parentCategories as Array<string>).map(category => new ObjectId(category))
+            const filter = {"_id":new ObjectId(re)}
+            const updateDocs = {$addToSet:{"parentCategoryId":{$each:parentCategories}}}
+            const cat = await CategoryRepo.collection?.updateMany(filter, updateDocs)
+        }
 
     
         res.status(200).send({
@@ -109,25 +111,17 @@ export const updateCategory = async (req: Request, res: Response) => {
             },
             cover: coverImageData,
             icon: iconImage,
-            level: category.level || req.body.level || 0
+            level:  req.body.level || category.level || 0
         }
         
         let re = await CategoryRepo.update(_id,data);
-        if (req.body.subCategories !== undefined ){
-            const subCategories = (req.body.subCategories as Array<string>).map(category => new ObjectId(category))
-            const filter = {"_id":{$in:subCategories}}
-            const updateDocs = {$addToSet:{"parentCategoryId":new ObjectId(_id)}}
-            let cat = await CategoryRepo.collection?.updateMany(filter, updateDocs)
-            cat = await CategoryRepo.collection?.updateMany(
-                {$and:[
-                    {"_id":{$nin:subCategories}},
-                    {"parentCategoryId":new ObjectId(_id)}
-                ]},
-                {$pull:{"parentCategoryId":new ObjectId(_id)}}                
-            ) 
+        if (req.body.parentCategories !== undefined ){
+            const parentCategories = (req.body.parentCategories as Array<string>).map(category => new ObjectId(category))
+            const filter = {"_id":new ObjectId(_id)}
+            const updateDocs = {$set:{"parentCategoryId":parentCategories}}
+            const cat = await CategoryRepo.collection?.updateMany(filter, updateDocs)
         }
 
-    
         res.status(200).send({
             status: 'success',
             data: re
