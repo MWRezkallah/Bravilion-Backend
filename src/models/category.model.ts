@@ -5,7 +5,6 @@ export interface ICategory{
     _id?:string;
     name:ILang;
     cover:IFile;
-    icon: IFile;
     parentCategoryId?:string[]
     level?:number
 }

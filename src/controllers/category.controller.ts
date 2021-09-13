@@ -14,14 +14,12 @@ export const createCategory = async (req: Request, res: Response) => {
 
         const values = Object.values(req.files !== undefined ? req.files: {});
         const coverImageData = extractImageModel(values[0][0]);
-        const iconImage = extractImageModel(values[1][0]);
         const data:ICategory = {
             name: {
                 arabic:req.body.arabicName,
                 english: req.body.englishName
             },
             cover: coverImageData,
-            icon: iconImage,
             level:req.body.level || 0
         }
         const re = await CategoryRepo.create(data);
@@ -91,18 +89,15 @@ export const updateCategory = async (req: Request, res: Response) => {
 
 
         const prevCoverImage = category.cover;
-        const prevIconImage = category.icon;
 
         const storage = new Storage();
         await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevCoverImage.name).delete();
-        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevIconImage.name).delete();
 
 
 
         const values = Object.values(req.files !== undefined ? req.files: {});
 
         const coverImageData = extractImageModel(values[0][0], prevCoverImage.createdAt);
-        const iconImage = extractImageModel(values[1][0], prevIconImage.createdAt);
 
         const data:ICategory = {
             name: {
@@ -110,7 +105,6 @@ export const updateCategory = async (req: Request, res: Response) => {
                 english: req.body.englishName
             },
             cover: coverImageData,
-            icon: iconImage,
             level:  req.body.level || category.level || 0
         }
         
@@ -141,11 +135,9 @@ export const deleteCategory = async (req: Request, res: Response) => {
         const category:any = await CategoryRepo.findOne(_id);
         
         const prevCoverImage = category.cover.name;
-        const prevIconImage = category.icon.name;
 
         const storage = new Storage();
         await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevCoverImage).delete();
-        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevIconImage).delete();
 
         
         await CategoryRepo.delete(_id);
