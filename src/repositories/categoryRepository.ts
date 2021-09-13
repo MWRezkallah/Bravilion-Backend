@@ -62,4 +62,19 @@ export class CategoryRepository extends Repository<ICategory> implements IReposi
 
     }
 
+    
+    async getCategoriesOptions(){
+        
+        if (!this.collection) {
+            await this.initCollection();
+        }
+
+       return await this.collection?.aggregate([           
+            {$project:{"name":1, "level":1}}
+
+        ]).toArray();
+
+    }
+
+
 }

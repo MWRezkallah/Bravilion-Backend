@@ -161,3 +161,20 @@ export const deleteCategory = async (req: Request, res: Response) => {
         });
     }
 }
+
+export const getAllCategoriesOptions = async (req: Request, res: Response) => {
+    try{
+        const CategoryRepo = new CategoryRepository();
+
+        const categories = await CategoryRepo.getCategoriesOptions();
+        res.status(200).send({
+            status: 'success',
+            data: categories,
+        });
+    }catch(e){
+        res.status(400).send({
+            status: 'Error',
+            Error: e
+        });
+    }
+}
