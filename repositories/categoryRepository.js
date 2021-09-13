@@ -48,6 +48,15 @@ class CategoryRepository extends repository_1.Repository {
             { $project: { "subCategories.parentCategoryId": 0 } }
         ]).toArray());
     }
+    async getCategoriesOptions() {
+        var _a;
+        if (!this.collection) {
+            await this.initCollection();
+        }
+        return await ((_a = this.collection) === null || _a === void 0 ? void 0 : _a.aggregate([
+            { $project: { "name": 1, "level": 1 } }
+        ]).toArray());
+    }
 }
 exports.CategoryRepository = CategoryRepository;
 //# sourceMappingURL=categoryRepository.js.map

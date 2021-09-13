@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCategory = exports.updateCategory = exports.getCategory = exports.getAllCategories = exports.createCategory = void 0;
+exports.getAllCategoriesOptions = exports.deleteCategory = exports.updateCategory = exports.getCategory = exports.getAllCategories = exports.createCategory = void 0;
 const categoryRepository_1 = require("../repositories/categoryRepository");
 const lib_1 = require("../lib");
 const Storage = require("@google-cloud/storage");
@@ -143,4 +143,21 @@ const deleteCategory = async (req, res) => {
     }
 };
 exports.deleteCategory = deleteCategory;
+const getAllCategoriesOptions = async (req, res) => {
+    try {
+        const CategoryRepo = new categoryRepository_1.CategoryRepository();
+        const categories = await CategoryRepo.getCategoriesOptions();
+        res.status(200).send({
+            status: 'success',
+            data: categories,
+        });
+    }
+    catch (e) {
+        res.status(400).send({
+            status: 'Error',
+            Error: e
+        });
+    }
+};
+exports.getAllCategoriesOptions = getAllCategoriesOptions;
 //# sourceMappingURL=category.controller.js.map
