@@ -22,10 +22,12 @@ const createCategory = async (req, res) => {
             level: req.body.level || 0
         };
         const re = await CategoryRepo.create(data);
-        const subCategories = req.body.subCategories.map(category => new bson_1.ObjectId(category));
-        const filter = { "_id": { $in: subCategories } };
-        const updateDocs = { $addToSet: { "parentCategoryId": new bson_1.ObjectId(re) } };
-        const cat = await ((_a = CategoryRepo.collection) === null || _a === void 0 ? void 0 : _a.updateMany(filter, updateDocs));
+        if (req.body.parentCategories) {
+            const parentCategories = req.body.parentCategories.map(category => new bson_1.ObjectId(category));
+            const filter = { "_id": new bson_1.ObjectId(re) };
+            const updateDocs = { $addToSet: { "parentCategoryId": { $each: parentCategories } } };
+            const cat = await ((_a = CategoryRepo.collection) === null || _a === void 0 ? void 0 : _a.updateMany(filter, updateDocs));
+        }
         res.status(200).send({
             status: 'success',
             data: re,
@@ -74,7 +76,7 @@ const getCategory = async (req, res) => {
 };
 exports.getCategory = getCategory;
 const updateCategory = async (req, res) => {
-    var _a, _b;
+    var _a;
     try {
         const CategoryRepo = new categoryRepository_1.CategoryRepository();
         const _id = req.params.id;
@@ -94,18 +96,14 @@ const updateCategory = async (req, res) => {
             },
             cover: coverImageData,
             icon: iconImage,
-            level: category.level || req.body.level || 0
+            level: req.body.level || category.level || 0
         };
         let re = await CategoryRepo.update(_id, data);
-        if (req.body.subCategories !== undefined) {
-            const subCategories = req.body.subCategories.map(category => new bson_1.ObjectId(category));
-            const filter = { "_id": { $in: subCategories } };
-            const updateDocs = { $addToSet: { "parentCategoryId": new bson_1.ObjectId(_id) } };
-            let cat = await ((_a = CategoryRepo.collection) === null || _a === void 0 ? void 0 : _a.updateMany(filter, updateDocs));
-            cat = await ((_b = CategoryRepo.collection) === null || _b === void 0 ? void 0 : _b.updateMany({ $and: [
-                    { "_id": { $nin: subCategories } },
-                    { "parentCategoryId": new bson_1.ObjectId(_id) }
-                ] }, { $pull: { "parentCategoryId": new bson_1.ObjectId(_id) } }));
+        if (req.body.parentCategories !== undefined) {
+            const parentCategories = req.body.parentCategories.map(category => new bson_1.ObjectId(category));
+            const filter = { "_id": new bson_1.ObjectId(_id) };
+            const updateDocs = { $set: { "parentCategoryId": parentCategories } };
+            const cat = await ((_a = CategoryRepo.collection) === null || _a === void 0 ? void 0 : _a.updateMany(filter, updateDocs));
         }
         res.status(200).send({
             status: 'success',
