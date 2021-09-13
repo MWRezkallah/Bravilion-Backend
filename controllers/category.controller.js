@@ -11,14 +11,12 @@ const createCategory = async (req, res) => {
         const CategoryRepo = new categoryRepository_1.CategoryRepository();
         const values = Object.values(req.files !== undefined ? req.files : {});
         const coverImageData = lib_1.extractImageModel(values[0][0]);
-        const iconImage = lib_1.extractImageModel(values[1][0]);
         const data = {
             name: {
                 arabic: req.body.arabicName,
                 english: req.body.englishName
             },
             cover: coverImageData,
-            icon: iconImage,
             level: req.body.level || 0
         };
         const re = await CategoryRepo.create(data);
@@ -82,20 +80,16 @@ const updateCategory = async (req, res) => {
         const _id = req.params.id;
         const category = await CategoryRepo.findOne(_id);
         const prevCoverImage = category.cover;
-        const prevIconImage = category.icon;
         const storage = new Storage();
         await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevCoverImage.name).delete();
-        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevIconImage.name).delete();
         const values = Object.values(req.files !== undefined ? req.files : {});
         const coverImageData = lib_1.extractImageModel(values[0][0], prevCoverImage.createdAt);
-        const iconImage = lib_1.extractImageModel(values[1][0], prevIconImage.createdAt);
         const data = {
             name: {
                 arabic: req.body.arabicName,
                 english: req.body.englishName
             },
             cover: coverImageData,
-            icon: iconImage,
             level: req.body.level || category.level || 0
         };
         let re = await CategoryRepo.update(_id, data);
@@ -125,10 +119,8 @@ const deleteCategory = async (req, res) => {
         const _id = req.params.id;
         const category = await CategoryRepo.findOne(_id);
         const prevCoverImage = category.cover.name;
-        const prevIconImage = category.icon.name;
         const storage = new Storage();
         await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevCoverImage).delete();
-        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevIconImage).delete();
         await CategoryRepo.delete(_id);
         await ((_a = CategoryRepo.collection) === null || _a === void 0 ? void 0 : _a.updateMany({ "parentCategoryId": new bson_1.ObjectId(_id) }, { $pull: { "parentCategoryId": new bson_1.ObjectId(_id) } }));
         res.status(200).send({
