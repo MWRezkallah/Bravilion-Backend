@@ -19,16 +19,15 @@ export const createCategory = async (req: Request, res: Response) => {
                 arabic:req.body.arabicName,
                 english: req.body.englishName
             },
-            cover: coverImageData,
-            level:req.body.level || 0
+            coverImage: coverImageData,
+            level: Number.parseInt(req.body.level) || 0,
+        }
+        if(req.body.parentCategoryId)
+        {
+            data["parentCategoryId"]= new ObjectId(req.body.parentCategoryId)
         }
         const re = await CategoryRepo.create(data);
-        if(req.body.parentCategories){
-            const parentCategories = (req.body.parentCategories as Array<string>).map(category => new ObjectId(category))
-            const filter = {"_id":new ObjectId(re)}
-            const updateDocs = {$addToSet:{"parentCategoryId":{$each:parentCategories}}}
-            const cat = await CategoryRepo.collection?.updateMany(filter, updateDocs)
-        }
+
 
     
         res.status(200).send({
@@ -88,7 +87,7 @@ export const updateCategory = async (req: Request, res: Response) => {
         const category:any = await CategoryRepo.findOne(_id);
 
 
-        const prevCoverImage = category.cover;
+        const prevCoverImage = category.coverImage;
 
         const storage = new Storage();
         await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevCoverImage.name).delete();
@@ -104,17 +103,16 @@ export const updateCategory = async (req: Request, res: Response) => {
                 arabic:req.body.arabicName,
                 english: req.body.englishName
             },
-            cover: coverImageData,
-            level:  req.body.level || category.level || 0
+            coverImage: coverImageData,
+            level:  Number.parseInt(req.body.level) || Number.parseInt(category.level) || 0,
+        }
+        if(req.body.parentCategoryId)
+        {
+            data["parentCategoryId"]= new ObjectId(req.body.parentCategoryId)
         }
         
         let re = await CategoryRepo.update(_id,data);
-        if (req.body.parentCategories !== undefined ){
-            const parentCategories = (req.body.parentCategories as Array<string>).map(category => new ObjectId(category))
-            const filter = {"_id":new ObjectId(_id)}
-            const updateDocs = {$set:{"parentCategoryId":parentCategories}}
-            const cat = await CategoryRepo.collection?.updateMany(filter, updateDocs)
-        }
+ 
 
         res.status(200).send({
             status: 'success',
@@ -134,14 +132,14 @@ export const deleteCategory = async (req: Request, res: Response) => {
         const _id = req.params.id;
         const category:any = await CategoryRepo.findOne(_id);
         
-        const prevCoverImage = category.cover.name;
+        const prevCoverImage = category.coverImage.name;
 
         const storage = new Storage();
         await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevCoverImage).delete();
 
         
         await CategoryRepo.delete(_id);
-        await CategoryRepo.collection?.updateMany({"parentCategoryId":new ObjectId(_id)}, {$pull:{"parentCategoryId":new ObjectId(_id)}})
+        await CategoryRepo.collection?.updateMany({"parentCategoryId":new ObjectId(_id)}, {$unset:{"parentCategoryId":""}})
     
         res.status(200).send({
             status: 'successfully delete',

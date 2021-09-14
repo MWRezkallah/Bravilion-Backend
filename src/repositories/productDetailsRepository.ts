@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { IRepository, Repository } from ".";
-import { IProductDetails } from "../models/productDetails.model";
+import { IProductDetails } from "../models/oldproductDetails.model";
 
 export class ProductDetailsRepository extends Repository<IProductDetails> implements IRepository<IProductDetails> {
 

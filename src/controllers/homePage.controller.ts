@@ -3,7 +3,6 @@ import { HomePageRepository } from '../repositories';
 import * as Storage from '@google-cloud/storage';
 import { extractImageModel } from '../lib/index';
 import { ObjectId } from 'bson';
-import { filter } from 'compression';
 
 
 export const createHomePage = async (req: Request, res: Response) => {
@@ -102,7 +101,6 @@ export const updateHomePage = async (req: Request, res: Response) => {
                 updatedHomePage[`${file.fieldname}`]= extractImageModel(file);
         })
         
-        console.log(updatedHomePage)
         const re = await homePageRepo.collection?.replaceOne({"_id":new ObjectId(_id)}, updatedHomePage);
         
 

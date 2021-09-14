@@ -1,18 +1,18 @@
 import { Request, Response  } from "express";
 import { ITopCategory } from "../models";
 import { TopCategoryRepository, CategoryRepository } from "../repositories/";
-import { ObjectId } from "mongodb";
+import { ObjectId } from "bson";
 
 export const createTopCategory = async (req: Request, res: Response) => {
     try {
         const topCatRepo = new TopCategoryRepository();
-        const catId = new ObjectId(req.body.categoryId)
-        const topCategory = await topCatRepo.findOneByQuery({categoryId: catId});
-        if (topCategory) throw new Error(`Category with id ${catId} is already exists in top category`);
-        const catRepo = new CategoryRepository();
-        const category = await catRepo.findOneByQuery({_id: catId})
-        if (!category) throw new Error(`Category with id: ${catId}, doesn't exists in the category collection`)
-        const topCat = await topCatRepo.create({categoryId:catId})
+        const topcategory:ITopCategory ={
+            name:req.body.name,
+        }
+        if(req.body.parent) topcategory["parent"] = new ObjectId(req.body.parent);
+        req.body.childern? topcategory["childern"] = ((req.body.childern as Array<string>).map(child => new ObjectId(child))):[];
+
+        const topCat  = await topCatRepo.create(topcategory);
 
         res.status(200).send({
             status:"Success",
@@ -59,19 +59,27 @@ export const getTopCategory = async(req:Request, res: Response) => {
 }
 export const updateTopCategory = async (req: Request, res: Response)=>{
     try {
-        const catRepo = new CategoryRepository();
-        const newCatId = new ObjectId(req.body.categoryId)
-        const category = await catRepo.findOneByQuery({_id: newCatId})
-        if (!category) throw new Error(`there is no category with id: ${req.body.categoryId} in the category collection`);
+        const topCatID = new ObjectId(req.params.id);
         const topCatRepo = new TopCategoryRepository();
-        const catId = new ObjectId(req.params.id)
-        const topCategory = await topCatRepo.findOneByQuery({categoryId:catId});
-        if (!topCategory) throw new Error(`Category with id:${req.params.id} doesn't exists in the top category collection`)
-        const updatedTopCategory = await topCatRepo.update(topCategory._id, {categoryId:newCatId})
+        const topcategory:ITopCategory ={
+            name:req.body.name,
+        }
+        if(req.body.parent) topcategory["parent"] = new ObjectId(req.body.parent);
+        req.body.childern? topcategory["childern"] = ((req.body.childern as Array<string>).map(child => new ObjectId(child))):[];
+
+     
+
+        if(!topCatRepo.collection) await topCatRepo.initCollection();
+        const topCat  = await topCatRepo.collection?.findOneAndUpdate({"_id":topCatID}, {$set:{...topcategory}});
+
+        
+
         res.status(200).send({
-            status:"success",
-            data: updatedTopCategory
+            status:"Success",
+            data:  topCat?.value
         });
+        
+    
     } catch (error) {
         res.status(400).send({
             status:"Error",
@@ -83,7 +91,8 @@ export const updateTopCategory = async (req: Request, res: Response)=>{
 export const deleteTopCategory = async (req:Request, res:Response) => {
     try {
         const topCatRepo = new TopCategoryRepository();
-        await topCatRepo.deleteByQuery({categoryId: new ObjectId(req.params.id)});
+        if(!topCatRepo.collection) await topCatRepo.initCollection();
+        await topCatRepo.collection?.deleteOne({"_id":new ObjectId(req.params.id)});
         res.status(200).send({
             status:"success",
             message:`category with id: ${req.params.id} deleted successfully`

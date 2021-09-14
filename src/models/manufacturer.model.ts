@@ -19,7 +19,10 @@ export interface IManufacturer{
     catalogues?:{name:string, pdf:IFile, description:string}[],
     enquiries?:IGeneric[],
     projects?:IGeneric[],
-    videos?:{name:string, url:string, description:string}[]
+    videos?:{name:string, url:string, description:string}[],
+
+    family?:IGeneric[],
+    collections?:IGeneric[],
     
     tokens?:string[]
 

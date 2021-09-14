@@ -4,7 +4,9 @@ import { login, logout, signUp,
     createVideo, getVideos, getVideo, updateVideo, deleteVideo, 
     createProject, deleteProject, updateProject, getProject, getProjects,
     createEnquiry, deleteEnquiry, updateEnquiry, getEnquiryies, getEnquiry,
-    createCatalogue, getCatalogue, getCatalogues, updateCatalogue, deleteCatalogue} from '../controllers/manufacturer';
+    createCatalogue, getCatalogue, getCatalogues, updateCatalogue, deleteCatalogue,
+    createCollection, updateCollection, deleteCollection, getCollection, getCollections,
+    createFamily, updateFamily, deleteFamily, getFamily, getFamilies} from '../controllers/manufacturer';
 import  * as multer  from 'multer';
 import { imageFilter, pdfFilter, storage } from '../lib/multer';
 
@@ -55,5 +57,24 @@ router.put('/update-catalogue/:catalogueId', [uploadPdf.fields([{name:"pdf", max
 router.delete('/delete-catalogue/:catalogueId', authorizeManufacturer, deleteCatalogue)
 
 // catalogues?:{name:string, pdf:IFile, description:string}[],
+
+//collection
+router.post('/create-collection', [uploadImage.fields([{name:"coverImage", maxCount:1}]), authorizeManufacturer], createCollection)
+router.get('/get-collections/:manufacturerId?', getCollections)
+router.get('/get-collection/:collectionId', getCollection)
+router.put('/update-collection/:collectionId', [uploadImage.fields([{name:"coverImage", maxCount:1}]) ,authorizeManufacturer], updateCollection)
+router.delete('/delete-collection/:collectionId', authorizeManufacturer, deleteCollection)
+
+//family
+router.post('/create-family', [uploadImage.fields([{name:"coverImage", maxCount:1}]), authorizeManufacturer], createFamily)
+router.get('/get-families/:manufacturerId?', getFamilies)
+router.get('/get-family/:familyId', getFamily)
+router.put('/update-family/:familyId', [uploadImage.fields([{name:"coverImage", maxCount:1}]) ,authorizeManufacturer], updateFamily)
+router.delete('/delete-family/:familyId', authorizeManufacturer, deleteFamily)
+
+// todo
+//articles
+//fairs
+//orders
 
 export default router;

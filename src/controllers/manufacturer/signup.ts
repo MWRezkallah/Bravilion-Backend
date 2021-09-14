@@ -18,6 +18,8 @@ export const signUp = async (req: Request, res: Response) =>{
         // enquiries:IGeneric[],
         // projects:IGeneric[],
         // catalogues:{name:string, pdf:IFile, description:string},
+        //collection
+        //family
         
         // articlesId:string[],
         // tradeFairsId:string[],

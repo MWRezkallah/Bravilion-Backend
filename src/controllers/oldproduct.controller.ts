@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
-import { ProductDetailsRepository,ProductRepository } from '../repositories';
-import { IProductDetails, IProduct } from '../models';
+import { ProductDetailsRepository,ProductRepositoryOld } from '../repositories';
+import { IProductDetails, IProductOld } from '../models';
 import { extractImageModel } from '../lib';
 import { ObjectId } from 'mongodb';
 import * as Storage from '@google-cloud/storage';
@@ -25,8 +25,8 @@ export const createProduct = async(req: Request, res: Response) => {
         }
         const productDetails = await productDetailsRepo.create(productDetailsItem);
        
-        const productRepo = new ProductRepository();
-        const productItem:IProduct ={
+        const productRepo = new ProductRepositoryOld();
+        const productItem:IProductOld ={
             name:{arabic: req.body.arabicName, english: req.body.englishName},
             description:{arabic: req.body.arabicDescription, english: req.body.englishDescription},
             logo: extractImageModel(values[0][0]),
@@ -71,7 +71,7 @@ export const getProductsDetails = async (req: Request, res: Response) => {
 
 export const getProducts = async (req: Request, res: Response) => {
     try {
-        const productRepo = new ProductRepository();
+        const productRepo = new ProductRepositoryOld();
         const products = await productRepo.getProducts();
         res.status(200).send({
             status:"Success",
@@ -104,7 +104,7 @@ export const getProductDetails = async (req: Request, res: Response) => {
 
 export const getProduct = async (req: Request, res: Response) => {
     try {
-        const productRepo = new ProductRepository();
+        const productRepo = new ProductRepositoryOld();
         const product = await productRepo.findOne(req.params.id)
         res.status(200).send({
             status:"Success",
@@ -144,8 +144,8 @@ export const updateProduct = async (req: Request, res: Response) => {
 
         const updatedProductDetails = await productDetailsRepo.update(req.params.id, productDetailsItem);
 
-        const productRepo = new ProductRepository();
-        const productItem:IProduct ={ 
+        const productRepo = new ProductRepositoryOld();
+        const productItem:IProductOld ={ 
             name: productDetailsItem.name,
             description: productDetailsItem.description,
             logo: productDetailsItem.logo,
@@ -192,7 +192,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
         const productDetails:IProductDetails = await productDetailsRepo.findOne(req.params.id);
         await productDetailsRepo.delete(req.params.id);
         
-        const productRepo = new ProductRepository();
+        const productRepo = new ProductRepositoryOld();
         await productRepo.deleteByQuery({productDetailsId: productDetails._id})
 
         //if product is deleted, so we will delete its images

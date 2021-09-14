@@ -1,5 +1,9 @@
-import { ObjectId } from "mongodb";
+import { ObjectId } from "bson";
+import { ILang } from ".";
 
 export interface ITopCategory{
-    categoryId:ObjectId;
+    name?:ILang,
+    parent?:ObjectId,
+    childern?:ObjectId[]
+
 }

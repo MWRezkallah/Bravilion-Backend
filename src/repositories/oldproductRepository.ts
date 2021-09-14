@@ -1,10 +1,10 @@
 import { ObjectId } from "mongodb";
 import { IRepository, Repository } from ".";
-import { IProduct } from "../models/product.model";
+import { IProductOld } from "../models/oldproduct.model";
 
-export class ProductRepository extends Repository<IProduct> implements IRepository<IProduct> {
+export class ProductRepositoryOld extends Repository<IProductOld> implements IRepository<IProductOld> {
 
-    collectionName="Product";
+    collectionName="ProductOld";
     constructor(){
         super();
     }

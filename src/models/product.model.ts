@@ -1,16 +1,15 @@
-import { ObjectId } from "mongodb";
-import { IFile } from "./file.model";
-import { ILang } from "./language.model";
+import { ObjectId } from "bson";
+import { IGeneric, IFile, ILang } from ".";
 
-
-export interface IProduct{
-    _id?:string;
-    name:ILang;
-    logo:IFile;
-    description:ILang;
-    price:number;
-    afterSalePrice?:number;
-    badges?:ObjectId[];
-    categories?:ObjectId[];
-    productDetailsId:ObjectId;
+export interface IProduct {
+    ownerId?:ObjectId,
+    name:ILang,
+    coverImage?:IFile,
+    views?:Number,
+    categories?:ObjectId[],
+    properties?:IGeneric[],
+    gallery?:IFile[],
+    familyId?:ObjectId[],
+    collectionId?:ObjectId[],
+    projectsId?:ObjectId[]
 }
