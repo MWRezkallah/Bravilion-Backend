@@ -16,6 +16,8 @@ const signUp = async (req, res) => {
         // enquiries:IGeneric[],
         // projects:IGeneric[],
         // catalogues:{name:string, pdf:IFile, description:string},
+        //collection
+        //family
         // articlesId:string[],
         // tradeFairsId:string[],
         // productsId:string[],

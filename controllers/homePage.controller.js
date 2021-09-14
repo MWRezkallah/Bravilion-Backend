@@ -84,7 +84,6 @@ const updateHomePage = async (req, res) => {
             //  Object.fromEntries([[`${file.fieldname}`, extractImageModel(file)]])
             updatedHomePage[`${file.fieldname}`] = index_1.extractImageModel(file);
         });
-        console.log(updatedHomePage);
         const re = await ((_a = homePageRepo.collection) === null || _a === void 0 ? void 0 : _a.replaceOne({ "_id": new bson_1.ObjectId(_id) }, updatedHomePage));
         res.status(200).send({
             status: 'success',

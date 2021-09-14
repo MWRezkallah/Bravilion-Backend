@@ -18,8 +18,8 @@ __exportStar(require("./category.model"), exports);
 __exportStar(require("./badge.model"), exports);
 __exportStar(require("./property.model"), exports);
 __exportStar(require("./language.model"), exports);
-__exportStar(require("./product.model"), exports);
-__exportStar(require("./productDetails.model"), exports);
+__exportStar(require("./oldproduct.model"), exports);
+__exportStar(require("./oldproductDetails.model"), exports);
 __exportStar(require("./IContactInfo"), exports);
 __exportStar(require("./supplier.model"), exports);
 __exportStar(require("./topCategory.model"), exports);
@@ -28,4 +28,5 @@ __exportStar(require("./homePage.model"), exports);
 __exportStar(require("./plan.model"), exports);
 __exportStar(require("./generic.model"), exports);
 __exportStar(require("./manufacturer.model"), exports);
+__exportStar(require("./product.model"), exports);
 //# sourceMappingURL=index.js.map

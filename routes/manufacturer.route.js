@@ -39,5 +39,21 @@ router.get('/get-catalogue/:catalogueId', manufacturer_1.getCatalogue);
 router.put('/update-catalogue/:catalogueId', [uploadPdf.fields([{ name: "pdf", maxCount: 1 }]), Manufacturer_1.authorizeManufacturer], manufacturer_1.updateCatalogue);
 router.delete('/delete-catalogue/:catalogueId', Manufacturer_1.authorizeManufacturer, manufacturer_1.deleteCatalogue);
 // catalogues?:{name:string, pdf:IFile, description:string}[],
+//collection
+router.post('/create-collection', [uploadImage.fields([{ name: "coverImage", maxCount: 1 }]), Manufacturer_1.authorizeManufacturer], manufacturer_1.createCollection);
+router.get('/get-collections/:manufacturerId?', manufacturer_1.getCollections);
+router.get('/get-collection/:collectionId', manufacturer_1.getCollection);
+router.put('/update-collection/:collectionId', [uploadImage.fields([{ name: "coverImage", maxCount: 1 }]), Manufacturer_1.authorizeManufacturer], manufacturer_1.updateCollection);
+router.delete('/delete-collection/:collectionId', Manufacturer_1.authorizeManufacturer, manufacturer_1.deleteCollection);
+//family
+router.post('/create-family', [uploadImage.fields([{ name: "coverImage", maxCount: 1 }]), Manufacturer_1.authorizeManufacturer], manufacturer_1.createFamily);
+router.get('/get-families/:manufacturerId?', manufacturer_1.getFamilies);
+router.get('/get-family/:familyId', manufacturer_1.getFamily);
+router.put('/update-family/:familyId', [uploadImage.fields([{ name: "coverImage", maxCount: 1 }]), Manufacturer_1.authorizeManufacturer], manufacturer_1.updateFamily);
+router.delete('/delete-family/:familyId', Manufacturer_1.authorizeManufacturer, manufacturer_1.deleteFamily);
+// todo
+//articles
+//fairs
+//orders
 exports.default = router;
 //# sourceMappingURL=manufacturer.route.js.map

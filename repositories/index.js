@@ -17,10 +17,11 @@ __exportStar(require("./HomeSliderRepository"), exports);
 __exportStar(require("./badgeRepository"), exports);
 __exportStar(require("./categoryRepository"), exports);
 __exportStar(require("./productDetailsRepository"), exports);
-__exportStar(require("./productRepository"), exports);
+__exportStar(require("./oldproductRepository"), exports);
 __exportStar(require("./topCategoryRepository"), exports);
 __exportStar(require("./serviceRepository"), exports);
 __exportStar(require("./HomePageRepository"), exports);
 __exportStar(require("./PlanRepository"), exports);
 __exportStar(require("./ManufacturerRepository"), exports);
+__exportStar(require("./ProductRepository"), exports);
 //# sourceMappingURL=index.js.map

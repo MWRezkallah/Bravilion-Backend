@@ -6,7 +6,6 @@ const lib_1 = require("../lib");
 const Storage = require("@google-cloud/storage");
 const bson_1 = require("bson");
 const createCategory = async (req, res) => {
-    var _a;
     try {
         const CategoryRepo = new categoryRepository_1.CategoryRepository();
         const values = Object.values(req.files !== undefined ? req.files : {});
@@ -16,16 +15,13 @@ const createCategory = async (req, res) => {
                 arabic: req.body.arabicName,
                 english: req.body.englishName
             },
-            cover: coverImageData,
-            level: req.body.level || 0
+            coverImage: coverImageData,
+            level: Number.parseInt(req.body.level) || 0,
         };
-        const re = await CategoryRepo.create(data);
-        if (req.body.parentCategories) {
-            const parentCategories = req.body.parentCategories.map(category => new bson_1.ObjectId(category));
-            const filter = { "_id": new bson_1.ObjectId(re) };
-            const updateDocs = { $addToSet: { "parentCategoryId": { $each: parentCategories } } };
-            const cat = await ((_a = CategoryRepo.collection) === null || _a === void 0 ? void 0 : _a.updateMany(filter, updateDocs));
+        if (req.body.parentCategoryId) {
+            data["parentCategoryId"] = new bson_1.ObjectId(req.body.parentCategoryId);
         }
+        const re = await CategoryRepo.create(data);
         res.status(200).send({
             status: 'success',
             data: re,
@@ -74,12 +70,11 @@ const getCategory = async (req, res) => {
 };
 exports.getCategory = getCategory;
 const updateCategory = async (req, res) => {
-    var _a;
     try {
         const CategoryRepo = new categoryRepository_1.CategoryRepository();
         const _id = req.params.id;
         const category = await CategoryRepo.findOne(_id);
-        const prevCoverImage = category.cover;
+        const prevCoverImage = category.coverImage;
         const storage = new Storage();
         await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevCoverImage.name).delete();
         const values = Object.values(req.files !== undefined ? req.files : {});
@@ -89,16 +84,13 @@ const updateCategory = async (req, res) => {
                 arabic: req.body.arabicName,
                 english: req.body.englishName
             },
-            cover: coverImageData,
-            level: req.body.level || category.level || 0
+            coverImage: coverImageData,
+            level: Number.parseInt(req.body.level) || Number.parseInt(category.level) || 0,
         };
-        let re = await CategoryRepo.update(_id, data);
-        if (req.body.parentCategories !== undefined) {
-            const parentCategories = req.body.parentCategories.map(category => new bson_1.ObjectId(category));
-            const filter = { "_id": new bson_1.ObjectId(_id) };
-            const updateDocs = { $set: { "parentCategoryId": parentCategories } };
-            const cat = await ((_a = CategoryRepo.collection) === null || _a === void 0 ? void 0 : _a.updateMany(filter, updateDocs));
+        if (req.body.parentCategoryId) {
+            data["parentCategoryId"] = new bson_1.ObjectId(req.body.parentCategoryId);
         }
+        let re = await CategoryRepo.update(_id, data);
         res.status(200).send({
             status: 'success',
             data: re
@@ -118,11 +110,11 @@ const deleteCategory = async (req, res) => {
         const CategoryRepo = new categoryRepository_1.CategoryRepository();
         const _id = req.params.id;
         const category = await CategoryRepo.findOne(_id);
-        const prevCoverImage = category.cover.name;
+        const prevCoverImage = category.coverImage.name;
         const storage = new Storage();
         await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevCoverImage).delete();
         await CategoryRepo.delete(_id);
-        await ((_a = CategoryRepo.collection) === null || _a === void 0 ? void 0 : _a.updateMany({ "parentCategoryId": new bson_1.ObjectId(_id) }, { $pull: { "parentCategoryId": new bson_1.ObjectId(_id) } }));
+        await ((_a = CategoryRepo.collection) === null || _a === void 0 ? void 0 : _a.updateMany({ "parentCategoryId": new bson_1.ObjectId(_id) }, { $unset: { "parentCategoryId": "" } }));
         res.status(200).send({
             status: 'successfully delete',
         });

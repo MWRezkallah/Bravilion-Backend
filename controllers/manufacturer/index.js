@@ -29,4 +29,12 @@ __exportStar(require("./catalogues/createCatalogue"), exports);
 __exportStar(require("./catalogues/deleteCatalogue"), exports);
 __exportStar(require("./catalogues/getCatalogues"), exports);
 __exportStar(require("./catalogues/updateCatalogue"), exports);
+__exportStar(require("./collections/createCollection"), exports);
+__exportStar(require("./collections/deleteCollection"), exports);
+__exportStar(require("./collections/getCollections"), exports);
+__exportStar(require("./collections/updateCollection"), exports);
+__exportStar(require("./families/createFamily"), exports);
+__exportStar(require("./families/deleteFamily"), exports);
+__exportStar(require("./families/getFamilies"), exports);
+__exportStar(require("./families/updateFamily"), exports);
 //# sourceMappingURL=index.js.map
