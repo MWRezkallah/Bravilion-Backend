@@ -24,4 +24,5 @@ __exportStar(require("./HomePageRepository"), exports);
 __exportStar(require("./PlanRepository"), exports);
 __exportStar(require("./ManufacturerRepository"), exports);
 __exportStar(require("./ProductRepository"), exports);
+__exportStar(require("./HomeTopCategoryRepository"), exports);
 //# sourceMappingURL=index.js.map

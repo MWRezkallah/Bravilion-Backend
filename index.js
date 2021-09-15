@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const cors = require("cors");
-const dotenv = require("dotenv");
-const evParsed = dotenv.config({ path: "./src/.env" }); // run npm run start from parent directory
-console.log(evParsed);
+// import * as dotenv from 'dotenv';
+// const evParsed = dotenv.config({path:"./src/.env"}); // run npm run start from parent directory
+// console.log(evParsed);
 // import * as helmet from 'helmet';
 const compression = require("compression");
 const routes_1 = require("./routes");
@@ -21,6 +21,7 @@ app.use('/api/suppliers', routes_1.SupplierRouter);
 app.use('/api/badges', routes_1.BadgeRouter);
 app.use('/api/products', routes_1.ProductRouter);
 app.use('/api/topCategory', routes_1.TopCategoryRouter);
+app.use('/api/homeTopCategory', routes_1.HomeTopCatRouter);
 app.use('/api/service', routes_1.ServiceRouter);
 app.use('/api/homePage', routes_1.HomePageRouter);
 app.use('/api/plan', routes_1.PlanRouter);
