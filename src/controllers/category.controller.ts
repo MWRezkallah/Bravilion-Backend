@@ -88,16 +88,13 @@ export const updateCategory = async (req: Request, res: Response) => {
 
 
         const prevCoverImage = category.coverImage;
-
-        const storage = new Storage();
-        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevCoverImage.name).delete();
-
-
-
+        
+        
+        
         const values = Object.values(req.files !== undefined ? req.files: {});
 
         const coverImageData = extractImageModel(values[0][0], prevCoverImage.createdAt);
-
+        
         const data:ICategory = {
             name: {
                 arabic:req.body.arabicName,
@@ -112,7 +109,10 @@ export const updateCategory = async (req: Request, res: Response) => {
         }
         
         let re = await CategoryRepo.update(_id,data);
- 
+        
+        
+                const storage = new Storage();
+                await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevCoverImage.name).delete();
 
         res.status(200).send({
             status: 'success',
@@ -133,13 +133,13 @@ export const deleteCategory = async (req: Request, res: Response) => {
         const category:any = await CategoryRepo.findOne(_id);
         
         const prevCoverImage = category.coverImage.name;
-
-        const storage = new Storage();
-        await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevCoverImage).delete();
-
+        
         
         await CategoryRepo.delete(_id);
         await CategoryRepo.collection?.updateMany({"parentCategoryId":new ObjectId(_id)}, {$unset:{"parentCategoryId":""}})
+        
+                const storage = new Storage();
+                await storage.bucket(`${process.env.GCS_BUCKET}`).file(prevCoverImage).delete();
     
         res.status(200).send({
             status: 'successfully delete',
