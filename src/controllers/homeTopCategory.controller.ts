@@ -48,6 +48,29 @@ export const getHomeTopCategory = async (req: Request, res: Response) => {
 
 }
 
+
+export const getHomeExcludedTopCategory = async (req: Request, res: Response) => {
+
+    try {
+        const homeTopCat =  new HomeTopCategoryRepository()
+        if(!homeTopCat.collection) await homeTopCat.initCollection();
+        const categories = await homeTopCat.getHomeExcludedTopCategories();
+
+        res.status(200).send({
+            status:"Success",
+            data:categories
+        })
+
+    } catch (error:any) {
+        res.status(400).send({
+            status:"Error",
+            message:error.message
+        })
+        
+    }
+
+}
+
 export const updateHomeTopCategory = async (req: Request, res: Response) => {
 
     try {

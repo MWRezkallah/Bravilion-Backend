@@ -60,4 +60,73 @@ export class HomeTopCategoryRepository extends Repository<IHomeTopCategory> impl
     
 
 
+
+
+
+async getHomeExcludedTopCategories(){
+        
+  if (!this.collection) {
+      await this.initCollection();
+  }
+
+ return await this.collection?.aggregate([
+  
+    {
+      '$group': {
+        '_id': '', 
+        'ids': {
+          '$push': '$category'
+        }
+      }
+    }, {
+      '$lookup': {
+        'from': 'Category', 
+        'let': {
+          'ids': '$ids'
+        }, 
+        'pipeline': [
+          {
+            '$match': {
+              '$expr': {
+                '$not': {
+                  '$in': [
+                    '$_id', '$$ids'
+                  ]
+                }
+              }
+            }
+          }
+        ], 
+        'as': 'categories'
+      }
+    }, {
+      '$unwind': {
+        'path': '$categories'
+      }
+    }, {
+      '$lookup': {
+        'from': 'Category', 
+        'localField': 'categories._id', 
+        'foreignField': 'parentCategoryId', 
+        'as': 'categories.subCategories'
+      }
+    }, {
+      '$project': {
+        '_id': 0, 
+        'ids': 0, 
+        'categories.subCategories.parentCategoryId': 0
+      }
+    }, {
+      '$replaceRoot': {
+        'newRoot': '$categories'
+      }
+    }
+    
+  ]).toArray();
+
+}
+
+
+
+
 }
