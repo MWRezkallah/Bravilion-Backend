@@ -1,6 +1,6 @@
 import { ObjectId } from "bson"
 import { Request, Response } from "express"
-import { HomeTopCategoryRepository } from "../repositories"
+import { HomeTopCategoryRepository, CategoryRepository } from "../repositories"
 export const createHomeTopCategory = async (req: Request, res: Response) => {
 
     try {
@@ -52,9 +52,9 @@ export const getHomeTopCategory = async (req: Request, res: Response) => {
 export const getHomeExcludedTopCategory = async (req: Request, res: Response) => {
 
     try {
-        const homeTopCat =  new HomeTopCategoryRepository()
+        const homeTopCat =  new CategoryRepository()
         if(!homeTopCat.collection) await homeTopCat.initCollection();
-        const categories = await homeTopCat.getHomeExcludedTopCategories();
+        const categories = await homeTopCat.getHomeTopCategoriesExcluded();
 
         res.status(200).send({
             status:"Success",

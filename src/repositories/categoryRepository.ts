@@ -61,6 +61,7 @@ export class CategoryRepository extends Repository<ICategory> implements IReposi
         ]).toArray();
 
     }
+    
 
     
     async getCategoriesOptions(){
@@ -77,4 +78,60 @@ export class CategoryRepository extends Repository<ICategory> implements IReposi
     }
 
 
+    async getHomeTopCategoriesExcluded(){
+        
+        if (!this.collection) {
+            await this.initCollection();
+        }
+
+       return await this.collection?.aggregate(
+        [
+            {
+              '$lookup': {
+                'from': 'HomeTopCategory', 
+                'localField': '_id', 
+                'foreignField': 'category', 
+                'as': 'topcat'
+              }
+            }, {
+              '$addFields': {
+                'isTop': {
+                  '$cond': [
+                    {
+                      '$cmp': [
+                        {
+                          '$size': '$topcat'
+                        }, 0
+                      ]
+                    }, true, false
+                  ]
+                }
+              }
+            }, {
+              '$match': {
+                'isTop': {
+                  '$eq': false
+                }
+              }
+            }, {
+              '$lookup': {
+                'from': 'Category', 
+                'localField': '_id', 
+                'foreignField': 'parentCategoryId', 
+                'as': 'subCategories'
+              }
+            }, {
+              '$project': {
+                'subCategories.parentCategoryId': 0, 
+                'topcat': 0, 
+                'isTop': 0
+              }
+            }
+          ]
+        ).toArray();
+
+    }
+    
+
 }
+
