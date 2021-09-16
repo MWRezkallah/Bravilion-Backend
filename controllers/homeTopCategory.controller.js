@@ -47,10 +47,10 @@ const getHomeTopCategory = async (req, res) => {
 exports.getHomeTopCategory = getHomeTopCategory;
 const getHomeExcludedTopCategory = async (req, res) => {
     try {
-        const homeTopCat = new repositories_1.HomeTopCategoryRepository();
+        const homeTopCat = new repositories_1.CategoryRepository();
         if (!homeTopCat.collection)
             await homeTopCat.initCollection();
-        const categories = await homeTopCat.getHomeExcludedTopCategories();
+        const categories = await homeTopCat.getHomeTopCategoriesExcluded();
         res.status(200).send({
             status: "Success",
             data: categories

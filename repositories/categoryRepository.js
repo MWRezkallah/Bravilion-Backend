@@ -57,6 +57,55 @@ class CategoryRepository extends repository_1.Repository {
             { $project: { "name": 1, "level": 1 } }
         ]).toArray());
     }
+    async getHomeTopCategoriesExcluded() {
+        var _a;
+        if (!this.collection) {
+            await this.initCollection();
+        }
+        return await ((_a = this.collection) === null || _a === void 0 ? void 0 : _a.aggregate([
+            {
+                '$lookup': {
+                    'from': 'HomeTopCategory',
+                    'localField': '_id',
+                    'foreignField': 'category',
+                    'as': 'topcat'
+                }
+            }, {
+                '$addFields': {
+                    'isTop': {
+                        '$cond': [
+                            {
+                                '$cmp': [
+                                    {
+                                        '$size': '$topcat'
+                                    }, 0
+                                ]
+                            }, true, false
+                        ]
+                    }
+                }
+            }, {
+                '$match': {
+                    'isTop': {
+                        '$eq': false
+                    }
+                }
+            }, {
+                '$lookup': {
+                    'from': 'Category',
+                    'localField': '_id',
+                    'foreignField': 'parentCategoryId',
+                    'as': 'subCategories'
+                }
+            }, {
+                '$project': {
+                    'subCategories.parentCategoryId': 0,
+                    'topcat': 0,
+                    'isTop': 0
+                }
+            }
+        ]).toArray());
+    }
 }
 exports.CategoryRepository = CategoryRepository;
 //# sourceMappingURL=categoryRepository.js.map
