@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteHomeTopCategory = exports.updateHomeTopCategory = exports.getHomeTopCategory = exports.createHomeTopCategory = void 0;
+exports.deleteHomeTopCategory = exports.updateHomeTopCategory = exports.getHomeExcludedTopCategory = exports.getHomeTopCategory = exports.createHomeTopCategory = void 0;
 const bson_1 = require("bson");
 const repositories_1 = require("../repositories");
 const createHomeTopCategory = async (req, res) => {
@@ -45,6 +45,25 @@ const getHomeTopCategory = async (req, res) => {
     }
 };
 exports.getHomeTopCategory = getHomeTopCategory;
+const getHomeExcludedTopCategory = async (req, res) => {
+    try {
+        const homeTopCat = new repositories_1.HomeTopCategoryRepository();
+        if (!homeTopCat.collection)
+            await homeTopCat.initCollection();
+        const categories = await homeTopCat.getHomeExcludedTopCategories();
+        res.status(200).send({
+            status: "Success",
+            data: categories
+        });
+    }
+    catch (error) {
+        res.status(400).send({
+            status: "Error",
+            message: error.message
+        });
+    }
+};
+exports.getHomeExcludedTopCategory = getHomeExcludedTopCategory;
 const updateHomeTopCategory = async (req, res) => {
     var _a, _b;
     try {
