@@ -29,7 +29,7 @@ export const login = async (req: Request, res: Response) => {
                 token : token
             }
         })
-    }catch(e){
+    }catch(e:any){
         res.status(400).send({
             status: 'Error',
             Error: e.message

@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { manuRegister, authenticateManufacturer, authorizeManufacturer } from '../middleware/Manufacturer';
-import { login, logout, signUp, 
+import { manuRegister, authenticateManufacturer, authorizeManufacturer, manuUpdate } from '../middleware/Manufacturer';
+import { login, logout, signUp, update, getManufacturer,
     createVideo, getVideos, getVideo, updateVideo, deleteVideo, 
     createProject, deleteProject, updateProject, getProject, getProjects,
     createEnquiry, deleteEnquiry, updateEnquiry, getEnquiryies, getEnquiry,
@@ -21,8 +21,10 @@ const router = Router();
 
 //Register & authenticate
 router.post('/login', formDataParser.none() , login);
-router.post('/signup', [uploadImage.fields([{name:"logo",maxCount:1}, {name:"header", maxCount:1}]), manuRegister], signUp);
+router.post('/signup', [formDataParser.none(), manuRegister], signUp);
+router.put('/update', [uploadImage.fields([{name:"logo",maxCount:1}, {name:"header", maxCount:1}]), manuUpdate], update);
 router.post('/logout', [authenticateManufacturer], logout);
+router.get('/get-manufacturer:manufacturerId?', getManufacturer)
 
 //videos
 router.post('/create-video', authorizeManufacturer, createVideo)

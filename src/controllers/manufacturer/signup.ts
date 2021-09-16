@@ -33,10 +33,10 @@ export const signUp = async (req: Request, res: Response) =>{
             email: req.body.email,
             password: await manuRepo.encrypPassword(req.body.password),
             name : req.body.name,
-            logo: extractImageModel(values[0][0]),
-            header: extractImageModel(values[1][0]),
-            about: req.body.about,
-            contactInfo:req.body.contactInfo
+            // logo: extractImageModel(values[0][0]),
+            // header: extractImageModel(values[1][0]),
+            // about: req.body.about,
+            // contactInfo:req.body.contactInfo
         };
 
 
