@@ -98,10 +98,12 @@ export const updateHomeTopCategory = async (req: Request, res: Response) => {
 export const deleteHomeTopCategory = async (req: Request, res: Response) => {
 
     try {
-        const categories = [].concat(req.body.category).map(cat => new ObjectId(cat))
+        let filter ={}
+        if(req.params.id)
+        {filter =  {"category":new ObjectId(req.params.id)}}
         const homeTopCat =  new HomeTopCategoryRepository()
         if(!homeTopCat.collection) await homeTopCat.initCollection();
-        const result = await homeTopCat.collection?.deleteMany({"category":{$in:categories}})
+        const result = await homeTopCat.collection?.deleteMany(filter)
 
         res.status(200).send({
             status:"Success",
