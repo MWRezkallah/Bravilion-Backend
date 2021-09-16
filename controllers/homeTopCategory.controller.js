@@ -89,11 +89,14 @@ exports.updateHomeTopCategory = updateHomeTopCategory;
 const deleteHomeTopCategory = async (req, res) => {
     var _a;
     try {
-        const categories = [].concat(req.body.category).map(cat => new bson_1.ObjectId(cat));
+        let filter = {};
+        if (req.params.id) {
+            filter = { "category": new bson_1.ObjectId(req.params.id) };
+        }
         const homeTopCat = new repositories_1.HomeTopCategoryRepository();
         if (!homeTopCat.collection)
             await homeTopCat.initCollection();
-        const result = await ((_a = homeTopCat.collection) === null || _a === void 0 ? void 0 : _a.deleteMany({ "category": { $in: categories } }));
+        const result = await ((_a = homeTopCat.collection) === null || _a === void 0 ? void 0 : _a.deleteMany(filter));
         res.status(200).send({
             status: "Success",
             message: result

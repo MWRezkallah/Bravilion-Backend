@@ -10,6 +10,6 @@ router.post('/create-home-top-category', controllers_1.createHomeTopCategory);
 router.get('/get-home-top-category', controllers_1.getHomeTopCategory);
 router.get('/categories-top-excluded', controllers_1.getHomeExcludedTopCategory);
 router.put('/update-home-top-category', controllers_1.updateHomeTopCategory);
-router.delete('/delete-home-top-category', controllers_1.deleteHomeTopCategory);
+router.delete('/delete-home-top-category/:id?', controllers_1.deleteHomeTopCategory);
 exports.default = router;
 //# sourceMappingURL=homeTopCategory.route.js.map
