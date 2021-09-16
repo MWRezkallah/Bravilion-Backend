@@ -13,6 +13,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./login"), exports);
 __exportStar(require("./logout"), exports);
 __exportStar(require("./signup"), exports);
+__exportStar(require("./update"), exports);
+__exportStar(require("./getManufacturer"), exports);
 __exportStar(require("./videos/createVideo"), exports);
 __exportStar(require("./videos/getVideos"), exports);
 __exportStar(require("./videos/updateVideo"), exports);

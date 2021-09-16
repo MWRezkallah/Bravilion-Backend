@@ -10,8 +10,10 @@ const formDataParser = multer();
 const router = express_1.Router();
 //Register & authenticate
 router.post('/login', formDataParser.none(), manufacturer_1.login);
-router.post('/signup', [uploadImage.fields([{ name: "logo", maxCount: 1 }, { name: "header", maxCount: 1 }]), Manufacturer_1.manuRegister], manufacturer_1.signUp);
+router.post('/signup', [formDataParser.none(), Manufacturer_1.manuRegister], manufacturer_1.signUp);
+router.put('/update', [uploadImage.fields([{ name: "logo", maxCount: 1 }, { name: "header", maxCount: 1 }]), Manufacturer_1.manuUpdate], manufacturer_1.update);
 router.post('/logout', [Manufacturer_1.authenticateManufacturer], manufacturer_1.logout);
+router.get('/get-manufacturer:manufacturerId?', manufacturer_1.getManufacturer);
 //videos
 router.post('/create-video', Manufacturer_1.authorizeManufacturer, manufacturer_1.createVideo);
 router.get('/get-videos/:manufacturerId?', manufacturer_1.getVideos);

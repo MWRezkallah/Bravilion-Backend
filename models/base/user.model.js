@@ -51,7 +51,7 @@ userSchema.methods.validatePassword = async function (password) {
 userSchema.methods.generateToken = async function () {
     const prefix = 6;
     const exp = new Date(new Date().getTime() + (prefix * 24 * 60 * 60 * 1000));
-    const token = jwt.sign({ _id: this._id, username: this.username, email: this.email }, `${process.env.apiSecretKey}`, { expiresIn: `${exp.getDate()} days` });
+    const token = jwt.sign({ _id: this._id, username: this.username, email: this.email, role: "Admin" }, `${process.env.apiSecretKey}`, { expiresIn: `${exp.getDate()} days` });
     if (this.tokens === undefined)
         this.tokens = [];
     this.tokens.push({ token: token });

@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signUp = void 0;
-const lib_1 = require("../../lib");
 const repositories_1 = require("../../repositories");
 const signUp = async (req, res) => {
     try {
@@ -28,10 +27,10 @@ const signUp = async (req, res) => {
             email: req.body.email,
             password: await manuRepo.encrypPassword(req.body.password),
             name: req.body.name,
-            logo: lib_1.extractImageModel(values[0][0]),
-            header: lib_1.extractImageModel(values[1][0]),
-            about: req.body.about,
-            contactInfo: req.body.contactInfo
+            // logo: extractImageModel(values[0][0]),
+            // header: extractImageModel(values[1][0]),
+            // about: req.body.about,
+            // contactInfo:req.body.contactInfo
         };
         const manuId = await manuRepo.create(newManu);
         const token = await manuRepo.generateToken(manuId);
