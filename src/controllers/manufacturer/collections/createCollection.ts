@@ -16,7 +16,7 @@ export const createCollection = async (req: Request, res: Response) =>{
         const collection = {
             "collectionId": collectionID,
              coverImage,
-             name:req.body.name
+             name:{arabic:req.body.arabicName, english:req.body.englishName}
         };
         
         const updatedData = await manuRepo.collection?.findOneAndUpdate({"_id":new ObjectId(res.locals.manufacturer._id)},

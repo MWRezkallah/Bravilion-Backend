@@ -19,7 +19,7 @@ export const updateCollection = async (req: Request, res: Response) =>{
 
         if(values[0][0].filename){
             const coverImage = extractImageModel(values[0][0])
-            update = {  $set:{"collections.$":{collectionId:collectionID, coverImage,name:req.body.name}}}
+            update = {  $set:{"collections.$":{collectionId:collectionID, coverImage,name:{arabic:req.body.arabicName, english:req.body.englishName}}}}
             hasImageChanged = true;
         }
         const manuRepo = new ManufacturerRepository()
