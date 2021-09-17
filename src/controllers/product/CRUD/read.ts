@@ -5,8 +5,9 @@ import { ProductRepository } from "../../../repositories"
 export const getProduct = async (req: Request, res: Response) => {
     try {
         const productId = new ObjectId(req.params.productId);
+        const manufacturerId = new ObjectId(res.locals.manufacturer._id);
         const prodRepo = new ProductRepository();
-        const product = await prodRepo.getProduct(productId);
+        const product = await prodRepo.getProduct(productId, manufacturerId);
         res.status(200).send({
             status:"Success",
             data: product
@@ -21,8 +22,9 @@ export const getProduct = async (req: Request, res: Response) => {
 
 export const getProducts = async (req: Request, res: Response) => {
     try {
+        const manufacturerId = new ObjectId(res.locals.manufacturer._id);
         const prodRepo = new ProductRepository();
-        const products = await prodRepo.getProducts();
+        const products = await prodRepo.getProducts(manufacturerId);
         res.status(200).send({
             status:"Success",
             data: products

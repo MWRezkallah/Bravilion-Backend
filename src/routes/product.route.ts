@@ -8,8 +8,8 @@ const upload = multer({storage: storage(`${process.env.productImagesPath}`), fil
 const router = Router();
 
 router.post('/create-product',[upload.fields([{name:"coverImage", maxCount:1}, {name:"gallery", maxCount:20}]), authorizeManufacturer], createProduct);
-router.get('/get-product/:productId', getProduct );
-router.get('/get-products', getProducts );
+router.get('/get-product/:productId', authorizeManufacturer,getProduct );
+router.get('/get-products', authorizeManufacturer,getProducts );
 router.put('/update-product/:productId',[upload.fields([{name:"coverImage", maxCount:1}, {name:"gallery", maxCount:20}]), authorizeManufacturer], updateProduct);
 router.delete('/delete-product/:productId', authorizeManufacturer, deleteProduct );
 

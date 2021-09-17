@@ -9,15 +9,15 @@ export class ProductRepository extends Repository<IProduct> implements IReposito
         super();
     }
 
-    getProduct = async (id:ObjectId)=>{
+    getProduct = async (productId:ObjectId, manufacturerId:ObjectId )=>{
         if(! this.collection) await this.initCollection();
-        await this.collection?.updateOne({"_id":id}, {$inc:{"views":1}});
+        // await this.collection?.updateOne({"_id":productId}, {$inc:{"views":1}});
         return await this.collection?.aggregate([
-            {$match:{"_id":id}}
+            {$match:{$and:[{"_id":productId},{ownerId:manufacturerId}]}}
         ]).toArray()
     }
-    getProducts = async ()=>{
+    getProducts = async (manufacturerId:ObjectId)=>{
         if(! this.collection) await this.initCollection();
-        return await this.collection?.aggregate().toArray()
+        return await this.collection?.aggregate([{$match:{ownerId:manufacturerId}}]).toArray()
     }
 }
