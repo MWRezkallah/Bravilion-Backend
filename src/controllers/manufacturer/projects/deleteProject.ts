@@ -1,6 +1,10 @@
 import { ObjectId } from "bson";
 import { Response, Request } from "express"
 import { ManufacturerRepository } from "../../../repositories";
+import * as Storage from '@google-cloud/storage';
+import {IFile} from '../../../models'
+import { ProductRepository } from "../../../repositories";
+
 
 export const deleteProject = async (req: Request, res: Response) =>{
 
@@ -17,6 +21,24 @@ export const deleteProject = async (req: Request, res: Response) =>{
                 {  $pull:{"projects":{"projectId":projectID}}},
                 {projection:{"manufacturerId":"$_id","_id":0, "projects":{$elemMatch:{"projectId":projectID}}}}
              )
+
+
+
+             const prodRepo = new ProductRepository();
+             if(!prodRepo.collection) await prodRepo.initCollection();
+             await prodRepo.collection?.updateMany({$and:[{"ownerId":new ObjectId(res.locals.manufacturer._id)},{"projectsId":projectID}]},
+                 {$pull:{"projectsId":projectID}})
+
+             if(project?.ok == 1){
+                const storage = new Storage();
+                if(project.value.coverImage){
+                    await storage.bucket(`${process.env.GCS_BUCKET}`).file(project.value.coverImage.name).delete();            
+                }
+                if(project.value.images && project.value.images.length>0){
+                    (project.value.images as Array<IFile>).map(async image =>
+                        await storage.bucket(`${process.env.GCS_BUCKET}`).file(image.name).delete())
+                    }
+            }
 
         res.status(200).send({
             status:"success",

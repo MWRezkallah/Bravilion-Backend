@@ -37,7 +37,7 @@ router.delete('/delete-video/:videoId', authorizeManufacturer, deleteVideo)
 router.post('/create-project',[ uploadImage.fields([{name:"coverImage", maxCount:1}, {name:"images", maxCount:20}]) , authorizeManufacturer], createProject)
 router.get('/get-projects/:manufacturerId?', getProjects)
 router.get('/get-project/:projectId', getProject)
-router.put('/update-project/:projectId', authorizeManufacturer, updateProject)
+router.put('/update-project/:projectId', [ uploadImage.fields([{name:"coverImage", maxCount:1}, {name:"images", maxCount:20}]) , authorizeManufacturer], updateProject)
 router.delete('/delete-project/:projectId', authorizeManufacturer, deleteProject)
 
 //enquiries 

@@ -14,7 +14,7 @@ export const updateProduct = async (req: Request, res: Response) => {
         const files = Object.values(req.files?req.files:{});
         const product:IProduct={
             ownerId : ownerId,
-            name : req.body.name,
+            name : {arabic: req.body.arabicName, english:req.body.englishName},
             coverImage: extractImageModel(files[0][0]),
             views:0,
         };
@@ -23,7 +23,7 @@ export const updateProduct = async (req: Request, res: Response) => {
         req.body.collectionId? product["collectionId"]= (req.body.collections as Array<string>).map(collection => new ObjectId(collection)) : [];
         req.body.projectsId? product["projectsId"] = (req.body.projects as Array<string>).map(project => new ObjectId(project)): [];
         req.body.categories? product["categories"] = (req.body.categories as Array<string>).map(category => new ObjectId(category)) : [];
-        req.body.gallery? product["gallery"] = (files[1] as Array<Express.Multer.File>).map( file => extractImageModel(file)) : []
+        if(files[1]) {product["gallery"] = (files[1] as Array<Express.Multer.File>).map( file => extractImageModel(file)) ;}
 
         const prodRepo = new ProductRepository();
         if(!prodRepo.collection) await prodRepo.initCollection();
