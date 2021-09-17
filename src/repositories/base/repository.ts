@@ -1,7 +1,7 @@
 import { Db, MongoClient, Collection, ObjectID } from "mongodb";
 import { Permissions } from "../../models";
 import { IRepository } from "./iRepository";
-
+import {mongoClient} from '../../lib/connectToDB'
 
 export class Repository<T> implements IRepository<T> {
 
@@ -15,10 +15,7 @@ export class Repository<T> implements IRepository<T> {
     permissions!: Permissions;
 
     constructor() {
-        this.dbClient = new MongoClient(this.dbUrl, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        this.dbClient = mongoClient
     }
 
     async initCollection(): Promise<void> {
