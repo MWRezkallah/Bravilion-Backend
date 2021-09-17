@@ -12,6 +12,6 @@ export interface IProject {
 }
 
 interface IProjectImage{
-    coverImage:IFile,
+    image:IFile,
     description?:string
 }

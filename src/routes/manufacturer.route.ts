@@ -24,7 +24,7 @@ router.post('/login', formDataParser.none() , login);
 router.post('/signup', [formDataParser.none(), manuRegister], signUp);
 router.put('/update', [uploadImage.fields([{name:"logo",maxCount:1}, {name:"header", maxCount:1}]), manuUpdate], update);
 router.post('/logout', [authenticateManufacturer], logout);
-router.get('/get-manufacturer:manufacturerId?', getManufacturer)
+router.get('/get-manufacturer/:manufacturerId?', getManufacturer)
 
 //videos
 router.post('/create-video', authorizeManufacturer, createVideo)
@@ -34,7 +34,7 @@ router.put('/update-video/:videoId', authorizeManufacturer, updateVideo)
 router.delete('/delete-video/:videoId', authorizeManufacturer, deleteVideo)
 
 //projects
-router.post('/create-project',[uploadImage.fields( [ {name:"coverImage", maxCount:1} , { name:"images", maxCount:20 } ] ),authorizeManufacturer], createProject)
+router.post('/create-project',[ uploadImage.fields([{name:"coverImage", maxCount:1}, {name:"images", maxCount:20}]) , authorizeManufacturer], createProject)
 router.get('/get-projects/:manufacturerId?', getProjects)
 router.get('/get-project/:projectId', getProject)
 router.put('/update-project/:projectId', authorizeManufacturer, updateProject)

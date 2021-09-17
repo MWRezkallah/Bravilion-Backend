@@ -6,8 +6,7 @@ import { extractImageModel } from "../../../lib";
 export const createProject = async (req: Request, res: Response) =>{
 
     try {
-        console.log(req.body)
-        const files = Object.values(req.files?req.files:{});
+        const files = Object.values(req.files ? req.files : {} );
         const manuRepo = new ManufacturerRepository()
         const projectID = new ObjectId()
         const project:IProject = {"projectId": projectID}
@@ -19,8 +18,8 @@ export const createProject = async (req: Request, res: Response) =>{
         if(files[0][0]){ project["coverImage"] = extractImageModel(files[0][0]);}
         if(files[1] ) {
              project["images"] = (files[1] as Array<Express.Multer.File>).map( (file,i) => {
-                return {coverImage:extractImageModel(file),
-                        description:req.body.descriptions[i]?.description || ""}
+                return {image:extractImageModel(file),
+                        description: `${req.body?.descriptions[i]}` || ""}
                 });
     } 
         if(!manuRepo.collection) await manuRepo.initCollection();
