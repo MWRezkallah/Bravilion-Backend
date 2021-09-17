@@ -2,15 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Repository = void 0;
 const mongodb_1 = require("mongodb");
+const connectToDB_1 = require("../../lib/connectToDB");
 class Repository {
     constructor() {
         this.dbUrl = `${process.env.connectionString}`;
         this.dbName = `${process.env.dbName}`;
         this.collectionName = '';
-        this.dbClient = new mongodb_1.MongoClient(this.dbUrl, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        this.dbClient = connectToDB_1.mongoClient;
     }
     async initCollection() {
         try {

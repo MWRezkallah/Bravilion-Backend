@@ -104,6 +104,7 @@ exports.authenticateManufacturer = authenticateManufacturer;
 const authorizeManufacturer = async (req, res, next) => {
     var _a;
     try {
+        console.log("hey");
         const token = req.header('Authorization') !== undefined ? (_a = req.header('Authorization')) === null || _a === void 0 ? void 0 : _a.replace('Bearer ', '') : "";
         if (!token) {
             throw new Error("Token is missing!");

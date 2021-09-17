@@ -1,0 +1,1 @@
+{"version":3,"file":"connectToDB.js","sourceRoot":"","sources":["../../src/lib/connectToDB.ts"],"names":[],"mappings":";;;AAAA,qCAAsC;AAEzB,QAAA,WAAW,GAAG,IAAI,qBAAW,CAAC,GAAG,OAAO,CAAC,GAAG,CAAC,gBAAgB,EAAE,EAAE;IAC1E,eAAe,EAAE,IAAI;IACrB,kBAAkB,EAAE,IAAI;IACxB,WAAW,EAAC,GAAG;IACf,QAAQ,EAAC,EAAE;CACd,CAAC,CAAC"}

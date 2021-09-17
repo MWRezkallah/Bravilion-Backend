@@ -21,7 +21,7 @@ router.get('/get-video/:videoId', manufacturer_1.getVideo);
 router.put('/update-video/:videoId', Manufacturer_1.authorizeManufacturer, manufacturer_1.updateVideo);
 router.delete('/delete-video/:videoId', Manufacturer_1.authorizeManufacturer, manufacturer_1.deleteVideo);
 //projects
-router.post('/create-project', Manufacturer_1.authorizeManufacturer, manufacturer_1.createProject);
+router.post('/create-project', [uploadImage.fields([{ name: "coverImage", maxCount: 1 }, { name: "images", maxCount: 20 }]), Manufacturer_1.authorizeManufacturer], manufacturer_1.createProject);
 router.get('/get-projects/:manufacturerId?', manufacturer_1.getProjects);
 router.get('/get-project/:projectId', manufacturer_1.getProject);
 router.put('/update-project/:projectId', Manufacturer_1.authorizeManufacturer, manufacturer_1.updateProject);
