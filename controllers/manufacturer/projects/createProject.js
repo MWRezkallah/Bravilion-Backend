@@ -4,16 +4,16 @@ exports.createProject = void 0;
 const bson_1 = require("bson");
 const repositories_1 = require("../../../repositories");
 const lib_1 = require("../../../lib");
+const repositories_2 = require("../../../repositories");
 const createProject = async (req, res) => {
-    var _a;
+    var _a, _b;
     try {
-        console.log(req.body);
         const files = Object.values(req.files ? req.files : {});
         const manuRepo = new repositories_1.ManufacturerRepository();
         const projectID = new bson_1.ObjectId();
         const project = { "projectId": projectID };
         if (req.body.name) {
-            project["name"] = req.body.name;
+            project["name"] = { arabic: req.body.arabicName, english: req.body.englishName };
         }
         if (req.body.smallDescription) {
             project["smallDescription"] = req.body.smallDescription;
@@ -22,7 +22,11 @@ const createProject = async (req, res) => {
             project["longDescription"] = req.body.longDescription;
         }
         if (req.body.productsId) {
-            project["productsId"] = req.body.productsId.map(product => new bson_1.ObjectId(product));
+            const products = req.body.productsId.map(product => new bson_1.ObjectId(product));
+            const prodRepo = new repositories_2.ProductRepository();
+            if (!prodRepo.collection)
+                await prodRepo.initCollection();
+            await ((_a = prodRepo.collection) === null || _a === void 0 ? void 0 : _a.updateMany({ $and: [{ "_id": { $in: products } }, { "ownerId": new bson_1.ObjectId(res.locals.manufacturer._id) }] }, { $push: { "projectsId": projectID } }));
         }
         if (files[0][0]) {
             project["coverImage"] = lib_1.extractImageModel(files[0][0]);
@@ -30,13 +34,13 @@ const createProject = async (req, res) => {
         if (files[1]) {
             project["images"] = files[1].map((file, i) => {
                 var _a;
-                return { coverImage: lib_1.extractImageModel(file),
-                    description: ((_a = req.body.descriptions[i]) === null || _a === void 0 ? void 0 : _a.description) || "" };
+                return { image: lib_1.extractImageModel(file),
+                    description: ((_a = req.body) === null || _a === void 0 ? void 0 : _a.descriptions[i]) || "" };
             });
         }
         if (!manuRepo.collection)
             await manuRepo.initCollection();
-        const updatedData = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.findOneAndUpdate({ "_id": new bson_1.ObjectId(res.locals.manufacturer._id) }, { $push: { "projects": project } }, { projection: { "_id": 1 } }));
+        const updatedData = await ((_b = manuRepo.collection) === null || _b === void 0 ? void 0 : _b.findOneAndUpdate({ "_id": new bson_1.ObjectId(res.locals.manufacturer._id) }, { $push: { "projects": project } }, { projection: { "_id": 1 } }));
         res.status(200).send({
             status: "success",
             message: `a project has  been created successfully for ${res.locals.manufacturer.name}`,

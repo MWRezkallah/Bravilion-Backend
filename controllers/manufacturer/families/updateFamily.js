@@ -17,7 +17,7 @@ const updateFamily = async (req, res) => {
         let hasImageChanged = false;
         if (values[0][0].filename) {
             const coverImage = lib_1.extractImageModel(values[0][0]);
-            update = { $set: { "families.$": { familyId: familyID, coverImage, name: req.body.name } } };
+            update = { $set: { "families.$": { familyId: familyID, coverImage, name: { arabic: req.body.arabicName, english: req.body.englishName } } } };
             hasImageChanged = true;
         }
         const manuRepo = new repositories_1.ManufacturerRepository();

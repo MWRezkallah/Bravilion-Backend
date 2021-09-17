@@ -18,7 +18,7 @@ const createCollection = async (req, res) => {
         const collection = {
             "collectionId": collectionID,
             coverImage,
-            name: req.body.name
+            name: { arabic: req.body.arabicName, english: req.body.englishName }
         };
         const updatedData = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.findOneAndUpdate({ "_id": new bson_1.ObjectId(res.locals.manufacturer._id) }, { $push: { "collections": collection } }, { projection: { "_id": 1 } }));
         if (req.body.products) {

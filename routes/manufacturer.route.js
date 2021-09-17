@@ -13,7 +13,7 @@ router.post('/login', formDataParser.none(), manufacturer_1.login);
 router.post('/signup', [formDataParser.none(), Manufacturer_1.manuRegister], manufacturer_1.signUp);
 router.put('/update', [uploadImage.fields([{ name: "logo", maxCount: 1 }, { name: "header", maxCount: 1 }]), Manufacturer_1.manuUpdate], manufacturer_1.update);
 router.post('/logout', [Manufacturer_1.authenticateManufacturer], manufacturer_1.logout);
-router.get('/get-manufacturer:manufacturerId?', manufacturer_1.getManufacturer);
+router.get('/get-manufacturer/:manufacturerId?', manufacturer_1.getManufacturer);
 //videos
 router.post('/create-video', Manufacturer_1.authorizeManufacturer, manufacturer_1.createVideo);
 router.get('/get-videos/:manufacturerId?', manufacturer_1.getVideos);
@@ -24,7 +24,7 @@ router.delete('/delete-video/:videoId', Manufacturer_1.authorizeManufacturer, ma
 router.post('/create-project', [uploadImage.fields([{ name: "coverImage", maxCount: 1 }, { name: "images", maxCount: 20 }]), Manufacturer_1.authorizeManufacturer], manufacturer_1.createProject);
 router.get('/get-projects/:manufacturerId?', manufacturer_1.getProjects);
 router.get('/get-project/:projectId', manufacturer_1.getProject);
-router.put('/update-project/:projectId', Manufacturer_1.authorizeManufacturer, manufacturer_1.updateProject);
+router.put('/update-project/:projectId', [uploadImage.fields([{ name: "coverImage", maxCount: 1 }, { name: "images", maxCount: 20 }]), Manufacturer_1.authorizeManufacturer], manufacturer_1.updateProject);
 router.delete('/delete-project/:projectId', Manufacturer_1.authorizeManufacturer, manufacturer_1.deleteProject);
 //enquiries 
 router.post('/create-enquiry', Manufacturer_1.authorizeManufacturer, manufacturer_1.createEnquiry);

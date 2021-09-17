@@ -10,7 +10,20 @@ const getProjects = async (req, res) => {
         const manuRepo = new repositories_1.ManufacturerRepository();
         if (!manuRepo.collection)
             await manuRepo.initCollection();
-        const projects = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.find(query, { projection: { "manufacturerId": "$_id", "_id": 0, "projects": 1 } }).toArray());
+        const projects = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.aggregate([
+            { $match: query },
+            { $project: { "manufacturerId": "$_id", "_id": 0, "projects": 1 } },
+            { $unwind: "$projects" },
+            {
+                $lookup: {
+                    from: "Product",
+                    localField: "projects.projectId",
+                    foreignField: "projectsId",
+                    as: "projects.products"
+                }
+            },
+            { $replaceRoot: { newRoot: "$projects" } }
+        ]).toArray());
         res.status(200).send({
             status: "success",
             data: projects
@@ -33,7 +46,27 @@ const getProject = async (req, res) => {
         if (!manuRepo.collection)
             await manuRepo.initCollection();
         const projectID = new bson_1.ObjectId(req.params.projectId);
-        const projects = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.find({ "projects.projectId": projectID }, { projection: { "manufacturerId": "$_id", "_id": 0, "projects": { $elemMatch: { "projectId": projectID } } } }).toArray());
+        const projects = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.aggregate([
+            { $match: { "projects.projectId": projectID }
+            },
+            { $project: { "manufacturerId": "$_id", "_id": 0, "projects": {
+                        $filter: {
+                            input: "$projects",
+                            as: "project",
+                            cond: { $eq: ["$$project.projectId", projectID] }
+                        }
+                    } }
+            },
+            { $unwind: "$projects" },
+            {
+                $lookup: {
+                    from: "Product",
+                    localField: "projects.projectId",
+                    foreignField: "projectsId",
+                    as: "projects.products"
+                }
+            }
+        ]).toArray());
         res.status(200).send({
             status: "success",
             data: projects

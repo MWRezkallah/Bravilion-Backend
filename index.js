@@ -11,8 +11,8 @@ const routes_1 = require("./routes");
 const app = express();
 const port = process.env.PORT || 8080;
 // parse application/json
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 app.listen(port, () => console.log(`Example app listening at ${process.env.baseUrl}:${port}`));
 app.use('/api/auth', routes_1.AuthRouter);
 app.use('/api/home-slider', routes_1.HomeSliderRouter);

@@ -12,14 +12,40 @@ class ProductRepository extends _1.Repository {
                 await this.initCollection();
             // await this.collection?.updateOne({"_id":productId}, {$inc:{"views":1}});
             return await ((_a = this.collection) === null || _a === void 0 ? void 0 : _a.aggregate([
-                { $match: { $and: [{ "_id": productId }, { ownerId: manufacturerId }] } }
+                {
+                    $match: {
+                        $and: [
+                            { "_id": productId }, { ownerId: manufacturerId }
+                        ]
+                    }
+                },
+                {
+                    '$lookup': {
+                        'from': 'Category',
+                        'localField': 'categories',
+                        'foreignField': '_id',
+                        'as': 'categories'
+                    }
+                }
             ]).toArray());
         };
         this.getProducts = async (manufacturerId) => {
             var _a;
             if (!this.collection)
                 await this.initCollection();
-            return await ((_a = this.collection) === null || _a === void 0 ? void 0 : _a.aggregate([{ $match: { ownerId: manufacturerId } }]).toArray());
+            return await ((_a = this.collection) === null || _a === void 0 ? void 0 : _a.aggregate([
+                {
+                    $match: { ownerId: manufacturerId }
+                },
+                {
+                    '$lookup': {
+                        'from': 'Category',
+                        'localField': 'categories',
+                        'foreignField': '_id',
+                        'as': 'categories'
+                    }
+                }
+            ]).toArray());
         };
     }
 }

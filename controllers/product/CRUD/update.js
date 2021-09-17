@@ -13,7 +13,7 @@ const updateProduct = async (req, res) => {
         const files = Object.values(req.files ? req.files : {});
         const product = {
             ownerId: ownerId,
-            name: req.body.name,
+            name: { arabic: req.body.arabicName, english: req.body.englishName },
             coverImage: lib_1.extractImageModel(files[0][0]),
             views: 0,
         };
@@ -22,7 +22,9 @@ const updateProduct = async (req, res) => {
         req.body.collectionId ? product["collectionId"] = req.body.collections.map(collection => new bson_1.ObjectId(collection)) : [];
         req.body.projectsId ? product["projectsId"] = req.body.projects.map(project => new bson_1.ObjectId(project)) : [];
         req.body.categories ? product["categories"] = req.body.categories.map(category => new bson_1.ObjectId(category)) : [];
-        req.body.gallery ? product["gallery"] = files[1].map(file => lib_1.extractImageModel(file)) : [];
+        if (files[1]) {
+            product["gallery"] = files[1].map(file => lib_1.extractImageModel(file));
+        }
         const prodRepo = new repositories_1.ProductRepository();
         if (!prodRepo.collection)
             await prodRepo.initCollection();

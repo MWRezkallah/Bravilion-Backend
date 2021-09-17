@@ -7,9 +7,9 @@ const lib_1 = require("../../../lib");
 const createProduct = async (req, res) => {
     try {
         const files = Object.values(req.files ? req.files : {});
-        const product = {
+        let product = {
             ownerId: new bson_1.ObjectId(res.locals.manufacturer._id),
-            name: req.body.name,
+            name: { arabic: req.body.arabicName, english: req.body.englishName },
             coverImage: lib_1.extractImageModel(files[0][0]),
             views: 0,
         };
@@ -18,7 +18,9 @@ const createProduct = async (req, res) => {
         req.body.collectionId ? product["collectionId"] = req.body.collections.map(collection => new bson_1.ObjectId(collection)) : [];
         req.body.projectsId ? product["projectsId"] = req.body.projects.map(project => new bson_1.ObjectId(project)) : [];
         req.body.categories ? product["categories"] = req.body.categories.map(category => new bson_1.ObjectId(category)) : [];
-        req.body.gallery ? product["gallery"] = files[1].map(file => lib_1.extractImageModel(file)) : [];
+        if (files[1]) {
+            product["gallery"] = files[1].map(file => lib_1.extractImageModel(file));
+        }
         const prodRepo = new repositories_1.ProductRepository();
         const result = await prodRepo.create(product);
         res.status(200).send({

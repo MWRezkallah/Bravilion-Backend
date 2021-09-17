@@ -17,7 +17,7 @@ const updateCollection = async (req, res) => {
         let hasImageChanged = false;
         if (values[0][0].filename) {
             const coverImage = lib_1.extractImageModel(values[0][0]);
-            update = { $set: { "collections.$": { collectionId: collectionID, coverImage, name: req.body.name } } };
+            update = { $set: { "collections.$": { collectionId: collectionID, coverImage, name: { arabic: req.body.arabicName, english: req.body.englishName } } } };
             hasImageChanged = true;
         }
         const manuRepo = new repositories_1.ManufacturerRepository();
