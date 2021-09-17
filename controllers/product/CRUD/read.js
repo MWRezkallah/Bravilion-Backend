@@ -6,8 +6,9 @@ const repositories_1 = require("../../../repositories");
 const getProduct = async (req, res) => {
     try {
         const productId = new bson_1.ObjectId(req.params.productId);
+        const manufacturerId = new bson_1.ObjectId(res.locals.manufacturer._id);
         const prodRepo = new repositories_1.ProductRepository();
-        const product = await prodRepo.getProduct(productId);
+        const product = await prodRepo.getProduct(productId, manufacturerId);
         res.status(200).send({
             status: "Success",
             data: product
@@ -23,8 +24,9 @@ const getProduct = async (req, res) => {
 exports.getProduct = getProduct;
 const getProducts = async (req, res) => {
     try {
+        const manufacturerId = new bson_1.ObjectId(res.locals.manufacturer._id);
         const prodRepo = new repositories_1.ProductRepository();
-        const products = await prodRepo.getProducts();
+        const products = await prodRepo.getProducts(manufacturerId);
         res.status(200).send({
             status: "Success",
             data: products

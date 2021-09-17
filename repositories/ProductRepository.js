@@ -6,20 +6,20 @@ class ProductRepository extends _1.Repository {
     constructor() {
         super();
         this.collectionName = "Product";
-        this.getProduct = async (id) => {
-            var _a, _b;
-            if (!this.collection)
-                await this.initCollection();
-            await ((_a = this.collection) === null || _a === void 0 ? void 0 : _a.updateOne({ "_id": id }, { $inc: { "views": 1 } }));
-            return await ((_b = this.collection) === null || _b === void 0 ? void 0 : _b.aggregate([
-                { $match: { "_id": id } }
-            ]).toArray());
-        };
-        this.getProducts = async () => {
+        this.getProduct = async (productId, manufacturerId) => {
             var _a;
             if (!this.collection)
                 await this.initCollection();
-            return await ((_a = this.collection) === null || _a === void 0 ? void 0 : _a.aggregate().toArray());
+            // await this.collection?.updateOne({"_id":productId}, {$inc:{"views":1}});
+            return await ((_a = this.collection) === null || _a === void 0 ? void 0 : _a.aggregate([
+                { $match: { $and: [{ "_id": productId }, { ownerId: manufacturerId }] } }
+            ]).toArray());
+        };
+        this.getProducts = async (manufacturerId) => {
+            var _a;
+            if (!this.collection)
+                await this.initCollection();
+            return await ((_a = this.collection) === null || _a === void 0 ? void 0 : _a.aggregate([{ $match: { ownerId: manufacturerId } }]).toArray());
         };
     }
 }
