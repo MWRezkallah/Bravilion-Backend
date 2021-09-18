@@ -6,7 +6,7 @@ export const getCollections = async (req: Request, res: Response) =>{
 
     try {
 
-        const query = (req.params.manufacturerId ) ? {"_id":new ObjectId(req.params.manufacturerId)} : {};
+        const query = (res.locals.manufacturer._id ) ? {"_id":new ObjectId(res.locals.manufacturer._id)} : {};
         const manuRepo = new ManufacturerRepository()
         if(!manuRepo.collection) await manuRepo.initCollection();
         const collections:any = await manuRepo.collection?.find(query, {projection:{"_id":0, "collections":1}}).toArray()
@@ -31,11 +31,12 @@ export const getCollection = async (req: Request, res: Response) =>{
 
         
         if(!req.params.collectionId ) throw new Error("please provide a collection ID")
+        const query = (res.locals.manufacturer._id ) ? {"_id":new ObjectId(res.locals.manufacturer._id)} : {};
 
         const manuRepo = new ManufacturerRepository()
         if(!manuRepo.collection) await manuRepo.initCollection();
         const collectionID = new ObjectId(req.params.collectionId);
-        const collections = await manuRepo.collection?.aggregate([{$match:{"collections.collectionId":collectionID}},
+        const collections = await manuRepo.collection?.aggregate([{$match:{...query,"collections.collectionId":collectionID}},
              {$project:{"_id":0,
               "collections":{$filter:{
                 input:"$collections",

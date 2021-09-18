@@ -6,7 +6,7 @@ export const getVideos = async (req: Request, res: Response) =>{
 
     try {
 
-        const query = (req.params.manufacturerId ) ? {"_id":new ObjectId(req.params.manufacturerId)} : {};
+        const query = (res.locals.manufacturer._id ) ? {"_id":new ObjectId(res.locals.manufacturer._id)} : {};
         const manuRepo = new ManufacturerRepository()
         if(!manuRepo.collection) await manuRepo.initCollection();
         const videos:any = await manuRepo.collection?.find(query, {projection:{"_id":0, "videos":1}}).toArray()
@@ -31,11 +31,12 @@ export const getVideo = async (req: Request, res: Response) =>{
 
         
         if(!req.params.videoId ) throw new Error("please provide a video ID")
+        const query = (res.locals.manufacturer._id ) ? {"_id":new ObjectId(res.locals.manufacturer._id)} : {};
 
         const manuRepo = new ManufacturerRepository()
         if(!manuRepo.collection) await manuRepo.initCollection();
         const videoID = new ObjectId(req.params.videoId);
-        const videos:any = await manuRepo.collection?.find({"videos.videoId":videoID}, {projection:{"_id":0, "videos":{$elemMatch:{"videoId":videoID}}}}).toArray()
+        const videos:any = await manuRepo.collection?.find({...query,"videos.videoId":videoID}, {projection:{"_id":0, "videos":{$elemMatch:{"videoId":videoID}}}}).toArray()
 
         res.status(200).send({
             status:"success",

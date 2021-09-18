@@ -6,7 +6,7 @@ export const getFamilies = async (req: Request, res: Response) =>{
 
     try {
 
-        const query = (req.params.manufacturerId ) ? {"_id":new ObjectId(req.params.manufacturerId)} : {};
+        const query = (res.locals.manufacturer._id ) ? {"_id":new ObjectId(res.locals.manufacturer._id)} : {};
         const manuRepo = new ManufacturerRepository()
         if(!manuRepo.collection) await manuRepo.initCollection();
         const families:any = await manuRepo.collection?.find(query, {projection:{"manufacturerId":"$_id","_id":0, "families":1}}).toArray()
@@ -31,11 +31,12 @@ export const getFamily = async (req: Request, res: Response) =>{
 
         
         if(!req.params.familyId ) throw new Error("please provide a family ID")
+        const query = (res.locals.manufacturer._id ) ? {"_id":new ObjectId(res.locals.manufacturer._id)} : {};
 
         const manuRepo = new ManufacturerRepository()
         if(!manuRepo.collection) await manuRepo.initCollection();
         const familyID = new ObjectId(req.params.familyId);
-        const family = await manuRepo.collection?.aggregate([{$match:{"families.familyId":familyID}},
+        const family = await manuRepo.collection?.aggregate([{$match:{...query,"families.familyId":familyID}},
              {$project:{"manufacturerId":"$_id","_id":0,
               "families":{$filter:{
                 input:"$families",

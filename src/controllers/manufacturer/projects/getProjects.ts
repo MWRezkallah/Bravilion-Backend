@@ -6,7 +6,7 @@ export const getProjects = async (req: Request, res: Response) =>{
 
     try {
 
-        const query = (req.params.manufacturerId ) ? {"_id":new ObjectId(req.params.manufacturerId)} : {};
+        const query = (res.locals.manufacturer._id ) ? {"_id":new ObjectId(res.locals.manufacturer._id)} : {};
         const manuRepo = new ManufacturerRepository()
         if(!manuRepo.collection) await manuRepo.initCollection();
         const projects = await manuRepo.collection?.aggregate([
@@ -44,13 +44,14 @@ export const getProject = async (req: Request, res: Response) =>{
 
         
         if(!req.params.projectId ) throw new Error("please provide a project ID")
+        const query = (res.locals.manufacturer._id ) ? {"_id":new ObjectId(res.locals.manufacturer._id)} : {};
 
         const manuRepo = new ManufacturerRepository()
         if(!manuRepo.collection) await manuRepo.initCollection();
         const projectID = new ObjectId(req.params.projectId);
         const projects = await manuRepo.collection?.aggregate([
             {$match:
-                {"projects.projectId":projectID}
+                {...query,"projects.projectId":projectID}
             },
             {$project:
                 {"manufacturerId":"$_id","_id":0, "projects":{
