@@ -14,7 +14,8 @@ export const updateVideo = async (req: Request, res: Response) =>{
         const videoID = new ObjectId(req.params.videoId);
 
         const video = await manuRepo.collection?.findOneAndUpdate({$and:[{"_id":new ObjectId(res.locals.manufacturer._id)},{"videos.videoId":videoID}]}, 
-                {  $set:{"videos.$":{videoId:videoID, ...req.body}}},
+                {  $set:{"videos.$":{videoId:videoID, name:req.body.name,
+                url:req.body.url, description:req.body.description}}},
                 {projection:{"manufacturerId":"$_id","_id":0, "videos":{$elemMatch:{"videoId":videoID}}}}
              )
 

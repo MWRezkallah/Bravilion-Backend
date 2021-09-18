@@ -14,12 +14,15 @@ export const updateCatalogue = async (req: Request, res: Response) =>{
 
         const values = Object.values(req.files !== undefined ? req.files: {});
         const catalogueID = new ObjectId(req.params.catalogueId);
-        let update = {  $set:{"catalogues.$":{catalogueId:catalogueID, ...req.body}}}
+        let update:any = {  $set:{"catalogues.$":{catalogueId:catalogueID,
+             description:{arabic:req.body.arabicDescription, english:req.body.englishDescription},
+             name:{arabic:req.body.arabicName,english:req.body.englishName}}}}
         let hasPdfChanged = false;
 
         if(values[0][0].filename){
             const pdf = extractPdfModel(values[0][0])
-            update = {  $set:{"catalogues.$":{catalogueId:catalogueID, pdf,...req.body}}}
+            update = {  $set:{"catalogues.$":{catalogueId:catalogueID, pdf , description:{arabic:req.body.arabicDescription, english:req.body.englishDescription},
+            name:{arabic:req.body.arabicName,english:req.body.englishName}}}}
             hasPdfChanged = true;
         }
         const manuRepo = new ManufacturerRepository()

@@ -14,7 +14,9 @@ export const createCatalogue = async (req: Request, res: Response) =>{
         if(!manuRepo.collection) await manuRepo.initCollection();
         const catalogueID = new ObjectId()
         const updatedData = await manuRepo.collection?.findOneAndUpdate({"_id":new ObjectId(res.locals.manufacturer._id)},
-             {$push:{"catalogues":{"catalogueId": catalogueID, pdf , ...req.body}}}, {projection:{"_id":1 }})
+             {$push:{"catalogues":{"catalogueId": catalogueID, pdf , 
+             description:{arabic:req.body.arabicDescription, english:req.body.englishDescription},
+             name:{arabic:req.body.arabicName,english:req.body.englishName}}}}, {projection:{"_id":1 }})
         
         res.status(200).send({
             status:"success",

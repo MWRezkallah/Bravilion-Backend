@@ -14,7 +14,7 @@ export const updateEnquiry = async (req: Request, res: Response) =>{
         const enquiryID = new ObjectId(req.params.enquiryId);
 
         const enquiry = await manuRepo.collection?.findOneAndUpdate({$and:[{"_id":new ObjectId(res.locals.manufacturer._id)},{"enquiries.enquiryId":enquiryID}]}, 
-                {  $set:{"enquiries.$":{enquiryId:enquiryID, ...req.body}}},
+                {  $set:{"enquiries.$":{enquiryId:enquiryID, name:req.body.name, question:req.body.question, answer:req.body.answer}}},
                 {projection:{"manufacturerId":"$_id","_id":0, "enquiries":{$elemMatch:{"enquiryId":enquiryID}}}}
              )
 

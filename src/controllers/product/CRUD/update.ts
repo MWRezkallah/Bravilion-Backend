@@ -33,7 +33,7 @@ export const updateProduct = async (req: Request, res: Response) => {
             if(result.value.coverImage){
                 await storage.bucket(`${process.env.GCS_BUCKET}`).file(result.value.coverImage.name).delete();            
             }
-            if(result.value.gallery && result.value.gallery.length>0){
+            if(files[1] && result.value.gallery && result.value.gallery.length>0){
                 (result.value.gallery as Array<IFile>).map(async image =>
                     await storage.bucket(`${process.env.GCS_BUCKET}`).file(image.name).delete())
                 }

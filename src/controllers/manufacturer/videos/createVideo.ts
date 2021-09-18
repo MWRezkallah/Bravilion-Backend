@@ -10,7 +10,8 @@ export const createVideo = async (req: Request, res: Response) =>{
         if(!manuRepo.collection) await manuRepo.initCollection();
         const videoID = new ObjectId()
         const updatedData = await manuRepo.collection?.findOneAndUpdate({"_id":new ObjectId(res.locals.manufacturer._id)},
-             {$push:{"videos":{"videoId": videoID, ...req.body}}}, {projection:{"_id":1 }})
+             {$push:{"videos":{"videoId": videoID, name:req.body.name,
+            url:req.body.url, description:req.body.description}}}, {projection:{"_id":1 }})
         
         res.status(200).send({
             status:"success",
