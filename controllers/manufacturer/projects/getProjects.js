@@ -65,7 +65,8 @@ const getProject = async (req, res) => {
                     foreignField: "projectsId",
                     as: "projects.products"
                 }
-            }
+            },
+            { $replaceRoot: { newRoot: "$projects" } }
         ]).toArray());
         res.status(200).send({
             status: "success",

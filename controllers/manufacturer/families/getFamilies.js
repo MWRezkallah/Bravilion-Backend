@@ -13,7 +13,7 @@ const getFamilies = async (req, res) => {
         const families = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.find(query, { projection: { "manufacturerId": "$_id", "_id": 0, "families": 1 } }).toArray());
         res.status(200).send({
             status: "success",
-            data: families
+            data: families[0].families || []
         });
     }
     catch (error) {
@@ -41,12 +41,16 @@ const getFamily = async (req, res) => {
                             cond: { $eq: ["$$family.familyId", familyID] }
                         } } }
             },
+            { $unwind: "$families" },
             { $lookup: {
                     from: "Product",
                     localField: "families.familyId",
                     foreignField: "familyId",
-                    as: "products"
-                } }]).toArray());
+                    as: "families.products"
+                } },
+            {
+                $replaceRoot: { newRoot: "$families" }
+            }]).toArray());
         res.status(200).send({
             status: "success",
             data: family
