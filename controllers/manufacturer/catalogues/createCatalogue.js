@@ -14,7 +14,9 @@ const createCatalogue = async (req, res) => {
         if (!manuRepo.collection)
             await manuRepo.initCollection();
         const catalogueID = new bson_1.ObjectId();
-        const updatedData = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.findOneAndUpdate({ "_id": new bson_1.ObjectId(res.locals.manufacturer._id) }, { $push: { "catalogues": Object.assign({ "catalogueId": catalogueID, pdf }, req.body) } }, { projection: { "_id": 1 } }));
+        const updatedData = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.findOneAndUpdate({ "_id": new bson_1.ObjectId(res.locals.manufacturer._id) }, { $push: { "catalogues": { "catalogueId": catalogueID, pdf,
+                    description: { arabic: req.body.arabicDescription, english: req.body.englishDescription },
+                    name: { arabic: req.body.arabicName, english: req.body.englishName } } } }, { projection: { "_id": 1 } }));
         res.status(200).send({
             status: "success",
             message: `a catalogue has  been created successfully for ${res.locals.manufacturer.name}`,

@@ -12,11 +12,14 @@ const updateCatalogue = async (req, res) => {
             throw new Error("please provide a catalogue ID");
         const values = Object.values(req.files !== undefined ? req.files : {});
         const catalogueID = new bson_1.ObjectId(req.params.catalogueId);
-        let update = { $set: { "catalogues.$": Object.assign({ catalogueId: catalogueID }, req.body) } };
+        let update = { $set: { "catalogues.$": { catalogueId: catalogueID,
+                    description: { arabic: req.body.arabicDescription, english: req.body.englishDescription },
+                    name: { arabic: req.body.arabicName, english: req.body.englishName } } } };
         let hasPdfChanged = false;
         if (values[0][0].filename) {
             const pdf = lib_1.extractPdfModel(values[0][0]);
-            update = { $set: { "catalogues.$": Object.assign({ catalogueId: catalogueID, pdf }, req.body) } };
+            update = { $set: { "catalogues.$": { catalogueId: catalogueID, pdf, description: { arabic: req.body.arabicDescription, english: req.body.englishDescription },
+                        name: { arabic: req.body.arabicName, english: req.body.englishName } } } };
             hasPdfChanged = true;
         }
         const manuRepo = new repositories_1.ManufacturerRepository();

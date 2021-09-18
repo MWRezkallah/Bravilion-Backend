@@ -50,7 +50,7 @@ const updateProject = async (req, res) => {
             if (project.value.coverImage) {
                 await storage.bucket(`${process.env.GCS_BUCKET}`).file(project.value.coverImage.name).delete();
             }
-            if (project.value.images && project.value.images.length > 0) {
+            if (files[1] && project.value.images && project.value.images.length > 0) {
                 project.value.images.map(async (image) => await storage.bucket(`${process.env.GCS_BUCKET}`).file(image.name).delete());
             }
         }

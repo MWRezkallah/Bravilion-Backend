@@ -12,7 +12,7 @@ const updateEnquiry = async (req, res) => {
         if (!manuRepo.collection)
             await manuRepo.initCollection();
         const enquiryID = new bson_1.ObjectId(req.params.enquiryId);
-        const enquiry = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.findOneAndUpdate({ $and: [{ "_id": new bson_1.ObjectId(res.locals.manufacturer._id) }, { "enquiries.enquiryId": enquiryID }] }, { $set: { "enquiries.$": Object.assign({ enquiryId: enquiryID }, req.body) } }, { projection: { "manufacturerId": "$_id", "_id": 0, "enquiries": { $elemMatch: { "enquiryId": enquiryID } } } }));
+        const enquiry = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.findOneAndUpdate({ $and: [{ "_id": new bson_1.ObjectId(res.locals.manufacturer._id) }, { "enquiries.enquiryId": enquiryID }] }, { $set: { "enquiries.$": { enquiryId: enquiryID, name: req.body.name, question: req.body.question, answer: req.body.answer } } }, { projection: { "manufacturerId": "$_id", "_id": 0, "enquiries": { $elemMatch: { "enquiryId": enquiryID } } } }));
         res.status(200).send({
             status: "success",
             data: enquiry === null || enquiry === void 0 ? void 0 : enquiry.value
