@@ -9,11 +9,11 @@ export const getCollections = async (req: Request, res: Response) =>{
         const query = (req.params.manufacturerId ) ? {"_id":new ObjectId(req.params.manufacturerId)} : {};
         const manuRepo = new ManufacturerRepository()
         if(!manuRepo.collection) await manuRepo.initCollection();
-        const collections = await manuRepo.collection?.find(query, {projection:{"manufacturerId":"$_id","_id":0, "collections":1}}).toArray()
+        const collections:any = await manuRepo.collection?.find(query, {projection:{"_id":0, "collections":1}}).toArray()
         
         res.status(200).send({
             status:"success",
-            data: collections
+            data: collections[0]?.collections || []
         })
 
     } catch (error:any) {
@@ -36,21 +36,24 @@ export const getCollection = async (req: Request, res: Response) =>{
         if(!manuRepo.collection) await manuRepo.initCollection();
         const collectionID = new ObjectId(req.params.collectionId);
         const collections = await manuRepo.collection?.aggregate([{$match:{"collections.collectionId":collectionID}},
-             {$project:{"manufacturerId":"$_id","_id":0,
+             {$project:{"_id":0,
               "collections":{$filter:{
                 input:"$collections",
                 as:"collection",
                 cond:{$eq:["$$collection.collectionId",collectionID]}}}}
             },
+            {$unwind:"$collections"},
             {$lookup:{
                 from:"Product",
                 localField:"collections.collectionId",
                 foreignField:"collectionId",
-                as:"products"
-            }}]).toArray()
+                as:"collections.products"
+            }},
+            {$replaceRoot:{newRoot:"$collections"}}
+        ]).toArray()
         res.status(200).send({
             status:"success",
-            data: collections 
+            data: collections
         })
 
     } catch (error:any) {

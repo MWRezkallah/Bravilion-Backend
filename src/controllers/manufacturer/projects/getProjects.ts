@@ -68,7 +68,8 @@ export const getProject = async (req: Request, res: Response) =>{
                     foreignField:"projectsId",
                     as:"projects.products"
                 }
-            }
+            },
+            {$replaceRoot:{newRoot:"$projects"}}
         ]).toArray()
         res.status(200).send({
             status:"success",

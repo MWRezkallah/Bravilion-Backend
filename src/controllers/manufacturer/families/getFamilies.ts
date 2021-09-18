@@ -9,11 +9,11 @@ export const getFamilies = async (req: Request, res: Response) =>{
         const query = (req.params.manufacturerId ) ? {"_id":new ObjectId(req.params.manufacturerId)} : {};
         const manuRepo = new ManufacturerRepository()
         if(!manuRepo.collection) await manuRepo.initCollection();
-        const families = await manuRepo.collection?.find(query, {projection:{"manufacturerId":"$_id","_id":0, "families":1}}).toArray()
+        const families:any = await manuRepo.collection?.find(query, {projection:{"manufacturerId":"$_id","_id":0, "families":1}}).toArray()
         
         res.status(200).send({
             status:"success",
-            data: families
+            data: families[0].families || []
         })
 
     } catch (error:any) {
@@ -42,12 +42,16 @@ export const getFamily = async (req: Request, res: Response) =>{
                 as:"family",
                 cond:{$eq:["$$family.familyId",familyID]}}}}
             },
+            {$unwind:"$families"},
             {$lookup:{
                 from:"Product",
                 localField:"families.familyId",
                 foreignField:"familyId",
-                as:"products"
-            }}]).toArray()
+                as:"families.products"
+            }},
+        {
+            $replaceRoot:{newRoot:"$families"}
+        }]).toArray()
         res.status(200).send({
             status:"success",
             data: family 

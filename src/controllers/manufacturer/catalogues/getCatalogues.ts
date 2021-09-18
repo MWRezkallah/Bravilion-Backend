@@ -9,11 +9,11 @@ export const getCatalogues = async (req: Request, res: Response) =>{
         const query = (req.params.manufacturerId ) ? {"_id":new ObjectId(req.params.manufacturerId)} : {};
         const manuRepo = new ManufacturerRepository()
         if(!manuRepo.collection) await manuRepo.initCollection();
-        const catalogues = await manuRepo.collection?.find(query, {projection:{"manufacturerId":"$_id","_id":0, "catalogues":1}}).toArray()
-        
+        const catalogues:any = await manuRepo.collection?.find(query, {projection:{"manufacturerId":"$_id","_id":0, "catalogues":1}}).toArray()
+
         res.status(200).send({
             status:"success",
-            data: catalogues
+            data: catalogues[0]?.catalogues || []
         })
 
     } catch (error:any) {
@@ -35,10 +35,10 @@ export const getCatalogue = async (req: Request, res: Response) =>{
         const manuRepo = new ManufacturerRepository()
         if(!manuRepo.collection) await manuRepo.initCollection();
         const catalogueID = new ObjectId(req.params.catalogueId);
-        const catalogues = await manuRepo.collection?.find({"catalogues.catalogueId":catalogueID}, {projection:{"manufacturerId":"$_id","_id":0, "catalogues":{$elemMatch:{"catalogueId":catalogueID}}}}).toArray()
+        const catalogues:any = await manuRepo.collection?.find({"catalogues.catalogueId":catalogueID}, {projection:{"manufacturerId":"$_id","_id":0, "catalogues":{$elemMatch:{"catalogueId":catalogueID}}}}).toArray()
         res.status(200).send({
             status:"success",
-            data: catalogues 
+            data: catalogues[0]?.catalogues
         })
 
     } catch (error:any) {
