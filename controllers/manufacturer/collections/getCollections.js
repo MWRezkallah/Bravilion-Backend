@@ -6,7 +6,7 @@ const repositories_1 = require("../../../repositories");
 const getCollections = async (req, res) => {
     var _a, _b;
     try {
-        const query = (req.params.manufacturerId) ? { "_id": new bson_1.ObjectId(req.params.manufacturerId) } : {};
+        const query = (res.locals.manufacturer._id) ? { "_id": new bson_1.ObjectId(res.locals.manufacturer._id) } : {};
         const manuRepo = new repositories_1.ManufacturerRepository();
         if (!manuRepo.collection)
             await manuRepo.initCollection();
@@ -29,11 +29,12 @@ const getCollection = async (req, res) => {
     try {
         if (!req.params.collectionId)
             throw new Error("please provide a collection ID");
+        const query = (res.locals.manufacturer._id) ? { "_id": new bson_1.ObjectId(res.locals.manufacturer._id) } : {};
         const manuRepo = new repositories_1.ManufacturerRepository();
         if (!manuRepo.collection)
             await manuRepo.initCollection();
         const collectionID = new bson_1.ObjectId(req.params.collectionId);
-        const collections = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.aggregate([{ $match: { "collections.collectionId": collectionID } },
+        const collections = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.aggregate([{ $match: Object.assign(Object.assign({}, query), { "collections.collectionId": collectionID }) },
             { $project: { "_id": 0,
                     "collections": { $filter: {
                             input: "$collections",
@@ -48,8 +49,7 @@ const getCollection = async (req, res) => {
                     foreignField: "collectionId",
                     as: "collections.products"
                 } },
-            { $replaceRoot: { newRoot: "$collections" } }
-        ]).toArray());
+            { $replaceRoot: { newRoot: "$collections" } }]).toArray());
         res.status(200).send({
             status: "success",
             data: collections

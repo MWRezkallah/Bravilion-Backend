@@ -6,7 +6,7 @@ const repositories_1 = require("../../../repositories");
 const getFamilies = async (req, res) => {
     var _a;
     try {
-        const query = (req.params.manufacturerId) ? { "_id": new bson_1.ObjectId(req.params.manufacturerId) } : {};
+        const query = (res.locals.manufacturer._id) ? { "_id": new bson_1.ObjectId(res.locals.manufacturer._id) } : {};
         const manuRepo = new repositories_1.ManufacturerRepository();
         if (!manuRepo.collection)
             await manuRepo.initCollection();
@@ -29,11 +29,12 @@ const getFamily = async (req, res) => {
     try {
         if (!req.params.familyId)
             throw new Error("please provide a family ID");
+        const query = (res.locals.manufacturer._id) ? { "_id": new bson_1.ObjectId(res.locals.manufacturer._id) } : {};
         const manuRepo = new repositories_1.ManufacturerRepository();
         if (!manuRepo.collection)
             await manuRepo.initCollection();
         const familyID = new bson_1.ObjectId(req.params.familyId);
-        const family = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.aggregate([{ $match: { "families.familyId": familyID } },
+        const family = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.aggregate([{ $match: Object.assign(Object.assign({}, query), { "families.familyId": familyID }) },
             { $project: { "manufacturerId": "$_id", "_id": 0,
                     "families": { $filter: {
                             input: "$families",

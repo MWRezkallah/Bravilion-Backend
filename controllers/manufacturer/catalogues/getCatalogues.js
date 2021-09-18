@@ -6,7 +6,7 @@ const repositories_1 = require("../../../repositories");
 const getCatalogues = async (req, res) => {
     var _a, _b;
     try {
-        const query = (req.params.manufacturerId) ? { "_id": new bson_1.ObjectId(req.params.manufacturerId) } : {};
+        const query = (res.locals.manufacturer._id) ? { "_id": new bson_1.ObjectId(res.locals.manufacturer._id) } : {};
         const manuRepo = new repositories_1.ManufacturerRepository();
         if (!manuRepo.collection)
             await manuRepo.initCollection();
@@ -29,11 +29,12 @@ const getCatalogue = async (req, res) => {
     try {
         if (!req.params.catalogueId)
             throw new Error("please provide a catalogue ID");
+        const query = (res.locals.manufacturer._id) ? { "_id": new bson_1.ObjectId(res.locals.manufacturer._id) } : {};
         const manuRepo = new repositories_1.ManufacturerRepository();
         if (!manuRepo.collection)
             await manuRepo.initCollection();
         const catalogueID = new bson_1.ObjectId(req.params.catalogueId);
-        const catalogues = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.find({ "catalogues.catalogueId": catalogueID }, { projection: { "manufacturerId": "$_id", "_id": 0, "catalogues": { $elemMatch: { "catalogueId": catalogueID } } } }).toArray());
+        const catalogues = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.find(Object.assign(Object.assign({}, query), { "catalogues.catalogueId": catalogueID }), { projection: { "manufacturerId": "$_id", "_id": 0, "catalogues": { $elemMatch: { "catalogueId": catalogueID } } } }).toArray());
         res.status(200).send({
             status: "success",
             data: (_b = catalogues[0]) === null || _b === void 0 ? void 0 : _b.catalogues

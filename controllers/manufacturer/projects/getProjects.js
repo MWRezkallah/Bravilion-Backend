@@ -6,7 +6,7 @@ const repositories_1 = require("../../../repositories");
 const getProjects = async (req, res) => {
     var _a;
     try {
-        const query = (req.params.manufacturerId) ? { "_id": new bson_1.ObjectId(req.params.manufacturerId) } : {};
+        const query = (res.locals.manufacturer._id) ? { "_id": new bson_1.ObjectId(res.locals.manufacturer._id) } : {};
         const manuRepo = new repositories_1.ManufacturerRepository();
         if (!manuRepo.collection)
             await manuRepo.initCollection();
@@ -42,12 +42,13 @@ const getProject = async (req, res) => {
     try {
         if (!req.params.projectId)
             throw new Error("please provide a project ID");
+        const query = (res.locals.manufacturer._id) ? { "_id": new bson_1.ObjectId(res.locals.manufacturer._id) } : {};
         const manuRepo = new repositories_1.ManufacturerRepository();
         if (!manuRepo.collection)
             await manuRepo.initCollection();
         const projectID = new bson_1.ObjectId(req.params.projectId);
         const projects = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.aggregate([
-            { $match: { "projects.projectId": projectID }
+            { $match: Object.assign(Object.assign({}, query), { "projects.projectId": projectID })
             },
             { $project: { "manufacturerId": "$_id", "_id": 0, "projects": {
                         $filter: {
