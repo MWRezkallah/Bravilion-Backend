@@ -21,9 +21,9 @@ export const updateProject = async (req: Request, res: Response) =>{
         const files = Object.values(req.files ? req.files : {} );
 
         const updatedProject:IProject = {"projectId": projectID}
-        if(req.body.name){ updatedProject["name"] ={arabic:req.body.arabicName, english:req.body.englishName};}
-        if(req.body.smallDescription){ updatedProject["smallDescription"] = req.body.smallDescription;}
-        if(req.body.longDescription){ updatedProject["longDescription"] = req.body.longDescription;}
+        if(req.body.arabicName && req.body.englishName){ updatedProject["name"] ={arabic:req.body.arabicName, english:req.body.englishName};}
+        if(req.body.arabicSmallDescription && req.body.englishSmallDescription){ updatedProject["smallDescription"] = {arabic:req.body.arabicSmallDescription, english:req.body.englishSmallDescription};}
+        if(req.body.arabicLongDescription && req.body.englishLongDescription){ updatedProject["longDescription"] = {arabic:req.body.arabicLongDescription, english:req.body.englishLongDescription};}
         if(req.body.productsId){
             const products = (req.body.productsId as Array<string>).map(product => new ObjectId(product));
             const prodRepo = new ProductRepository();
@@ -38,8 +38,8 @@ export const updateProject = async (req: Request, res: Response) =>{
         if(files[0][0]){ updatedProject["coverImage"] = extractImageModel(files[0][0]);}
         if(files[1] ) {
              updatedProject["images"] = (files[1] as Array<Express.Multer.File>).map( (file,i) => {
-                return {image:extractImageModel(file),
-                        description: req.body?.descriptions[i] || ""}
+                return extractImageModel(file)
+                   
                 });
     } 
 

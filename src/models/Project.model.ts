@@ -5,13 +5,12 @@ export interface IProject {
     projectId?:ObjectId,
     name?:ILang,
     coverImage?:IFile,
-    images?:IProjectImage[],
-    smallDescription?:string,
-    longDescription?:string,
+    images?:IFile[],
+    smallDescription?:ILang,
+    longDescription?:ILang,
     productsId?:ObjectId[]
 }
 
-interface IProjectImage{
-    image:IFile,
-    description?:string
-}
+// interface IProjectImage{
+//     image:IFile
+// }

@@ -12,9 +12,9 @@ export const createProject = async (req: Request, res: Response) =>{
         const manuRepo = new ManufacturerRepository()
         const projectID = new ObjectId()
         const project:IProject = {"projectId": projectID}
-        if(req.body.name){ project["name"] ={arabic: req.body.arabicName, english:req.body.englishName};}
-        if(req.body.smallDescription){ project["smallDescription"] = req.body.smallDescription;}
-        if(req.body.longDescription){ project["longDescription"] = req.body.longDescription;}
+        if(req.body.arabicName && req.body.englishName){ project["name"] ={arabic: req.body.arabicName, english:req.body.englishName};}
+        if(req.body.arabicSmallDescription && req.body.englishSmallDescription){ project["smallDescription"] = {arabic:req.body.arabicSmallDescription, english:req.body.englishSmallDescription}}
+        if(req.body.arabicLongDescription && req.body.englishLongDescription){ project["longDescription"] = {arabic: req.body.arabicLongDescription, english:req.body.englishLongDescription};}
         if(req.body.productsId){
             const products = (req.body.productsId as Array<string>).map(product => new ObjectId(product));
             const prodRepo = new ProductRepository();
@@ -26,8 +26,8 @@ export const createProject = async (req: Request, res: Response) =>{
         if(files[0][0]){ project["coverImage"] = extractImageModel(files[0][0]);}
         if(files[1] ) {
              project["images"] = (files[1] as Array<Express.Multer.File>).map( (file,i) => {
-                return {image:extractImageModel(file),
-                        description: req.body?.descriptions[i] || ""}
+                return extractImageModel(file)
+                       
                 });
     } 
         if(!manuRepo.collection) await manuRepo.initCollection();
