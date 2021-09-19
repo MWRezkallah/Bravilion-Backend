@@ -12,14 +12,14 @@ const createProject = async (req, res) => {
         const manuRepo = new repositories_1.ManufacturerRepository();
         const projectID = new bson_1.ObjectId();
         const project = { "projectId": projectID };
-        if (req.body.name) {
+        if (req.body.arabicName && req.body.englishName) {
             project["name"] = { arabic: req.body.arabicName, english: req.body.englishName };
         }
-        if (req.body.smallDescription) {
-            project["smallDescription"] = req.body.smallDescription;
+        if (req.body.arabicSmallDescription && req.body.englishSmallDescription) {
+            project["smallDescription"] = { arabic: req.body.arabicSmallDescription, english: req.body.englishSmallDescription };
         }
-        if (req.body.longDescription) {
-            project["longDescription"] = req.body.longDescription;
+        if (req.body.arabicLongDescription && req.body.englishLongDescription) {
+            project["longDescription"] = { arabic: req.body.arabicLongDescription, english: req.body.englishLongDescription };
         }
         if (req.body.productsId) {
             const products = req.body.productsId.map(product => new bson_1.ObjectId(product));
@@ -33,9 +33,7 @@ const createProject = async (req, res) => {
         }
         if (files[1]) {
             project["images"] = files[1].map((file, i) => {
-                var _a;
-                return { image: lib_1.extractImageModel(file),
-                    description: ((_a = req.body) === null || _a === void 0 ? void 0 : _a.descriptions[i]) || "" };
+                return lib_1.extractImageModel(file);
             });
         }
         if (!manuRepo.collection)

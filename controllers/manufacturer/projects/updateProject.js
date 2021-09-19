@@ -17,14 +17,14 @@ const updateProject = async (req, res) => {
         const projectID = new bson_1.ObjectId(req.params.projectId);
         const files = Object.values(req.files ? req.files : {});
         const updatedProject = { "projectId": projectID };
-        if (req.body.name) {
+        if (req.body.arabicName && req.body.englishName) {
             updatedProject["name"] = { arabic: req.body.arabicName, english: req.body.englishName };
         }
-        if (req.body.smallDescription) {
-            updatedProject["smallDescription"] = req.body.smallDescription;
+        if (req.body.arabicSmallDescription && req.body.englishSmallDescription) {
+            updatedProject["smallDescription"] = { arabic: req.body.arabicSmallDescription, english: req.body.englishSmallDescription };
         }
-        if (req.body.longDescription) {
-            updatedProject["longDescription"] = req.body.longDescription;
+        if (req.body.arabicLongDescription && req.body.englishLongDescription) {
+            updatedProject["longDescription"] = { arabic: req.body.arabicLongDescription, english: req.body.englishLongDescription };
         }
         if (req.body.productsId) {
             const products = req.body.productsId.map(product => new bson_1.ObjectId(product));
@@ -39,9 +39,7 @@ const updateProject = async (req, res) => {
         }
         if (files[1]) {
             updatedProject["images"] = files[1].map((file, i) => {
-                var _a;
-                return { image: lib_1.extractImageModel(file),
-                    description: ((_a = req.body) === null || _a === void 0 ? void 0 : _a.descriptions[i]) || "" };
+                return lib_1.extractImageModel(file);
             });
         }
         const project = await ((_c = manuRepo.collection) === null || _c === void 0 ? void 0 : _c.findOneAndUpdate({ $and: [{ "_id": new bson_1.ObjectId(res.locals.manufacturer._id) }, { "projects.projectId": projectID }] }, { $set: { "projects.$": updatedProject } }, { projection: { "manufacturerId": "$_id", "_id": 0, "projects": { $elemMatch: { "projectId": projectID } } } }));
