@@ -6,7 +6,8 @@ import { login, logout, signUp, update, getManufacturer,
     createEnquiry, deleteEnquiry, updateEnquiry, getEnquiryies, getEnquiry,
     createCatalogue, getCatalogue, getCatalogues, updateCatalogue, deleteCatalogue,
     createCollection, updateCollection, deleteCollection, getCollection, getCollections,
-    createFamily, updateFamily, deleteFamily, getFamily, getFamilies} from '../controllers/manufacturer';
+    createFamily, updateFamily, deleteFamily, getFamily, getFamilies,
+    getRequests, getRequest, updateRequest} from '../controllers/manufacturer';
 import  * as multer  from 'multer';
 import { imageFilter, pdfFilter, storage } from '../lib/multer';
 
@@ -73,6 +74,11 @@ router.get('/get-families/:manufacturerId?',authenticateManufacturer, getFamilie
 router.get('/get-family/:familyId', authenticateManufacturer,getFamily)
 router.put('/update-family/:familyId', [uploadImage.fields([{name:"coverImage", maxCount:1}]) ,authorizeManufacturer], updateFamily)
 router.delete('/delete-family/:familyId', authorizeManufacturer, deleteFamily)
+
+//requests
+router.get('/get-requests/:manufacturerId?',authenticateManufacturer, getRequests)
+router.get('/get-request/:requestId?',authenticateManufacturer, getRequest)
+router.put('/update-request/:requestId/:orderId',authenticateManufacturer, updateRequest)
 
 // todo
 //articles

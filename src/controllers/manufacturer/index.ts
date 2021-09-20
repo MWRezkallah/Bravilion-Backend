@@ -27,4 +27,5 @@ export * from './families/createFamily'
 export * from './families/deleteFamily'
 export * from './families/getFamilies'
 export * from './families/updateFamily'
-
+export * from './request/read'
+export * from './request/update'
