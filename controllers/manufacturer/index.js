@@ -39,4 +39,6 @@ __exportStar(require("./families/createFamily"), exports);
 __exportStar(require("./families/deleteFamily"), exports);
 __exportStar(require("./families/getFamilies"), exports);
 __exportStar(require("./families/updateFamily"), exports);
+__exportStar(require("./request/read"), exports);
+__exportStar(require("./request/update"), exports);
 //# sourceMappingURL=index.js.map

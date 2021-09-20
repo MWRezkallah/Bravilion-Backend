@@ -53,6 +53,10 @@ router.get('/get-families/:manufacturerId?', Manufacturer_1.authenticateManufact
 router.get('/get-family/:familyId', Manufacturer_1.authenticateManufacturer, manufacturer_1.getFamily);
 router.put('/update-family/:familyId', [uploadImage.fields([{ name: "coverImage", maxCount: 1 }]), Manufacturer_1.authorizeManufacturer], manufacturer_1.updateFamily);
 router.delete('/delete-family/:familyId', Manufacturer_1.authorizeManufacturer, manufacturer_1.deleteFamily);
+//requests
+router.get('/get-requests/:manufacturerId?', Manufacturer_1.authenticateManufacturer, manufacturer_1.getRequests);
+router.get('/get-request/:requestId?', Manufacturer_1.authenticateManufacturer, manufacturer_1.getRequest);
+router.put('/update-request/:requestId/:orderId', Manufacturer_1.authenticateManufacturer, manufacturer_1.updateRequest);
 // todo
 //articles
 //fairs
