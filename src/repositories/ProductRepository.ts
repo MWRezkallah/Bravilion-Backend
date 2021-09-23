@@ -51,11 +51,8 @@ export class ProductRepository extends Repository<IProduct> implements IReposito
         if(! this.collection) await this.initCollection();
         return await this.collection?.aggregate([
                 {
-                  '$lookup': {
-                    'from': 'Category', 
-                    'localField': 'categories', 
-                    'foreignField': '_id', 
-                    'as': 'categories'
+                  $project:{
+                    "name":1, "coverImage":1, "_id":1, "ownerId":1, "views":1
                   }
                 }
         ]).toArray()

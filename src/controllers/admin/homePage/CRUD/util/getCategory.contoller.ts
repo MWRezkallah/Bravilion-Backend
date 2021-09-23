@@ -4,11 +4,11 @@ import { CategoryRepository } from '../../../../../repositories/categoryReposito
 export const getAllCategories = async (req: Request, res: Response) => {
     try{
         const CategoryRepo = new CategoryRepository();
-
-        const categories = await CategoryRepo.getCategories();
+        if(!CategoryRepo.collection) await CategoryRepo.initCollection()
+        const categories = await CategoryRepo.collection?.find().toArray();
         res.status(200).send({
             status: 'success',
-            data: categories,
+            data: categories
         });
     }catch(e){
         res.status(400).send({
