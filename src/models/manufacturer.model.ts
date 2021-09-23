@@ -1,5 +1,5 @@
 import { ObjectId } from "bson";
-import { IFile, IGeneric } from ".";
+import { IFile, IGeneric, ILang } from ".";
 
 export interface IManufacturer{
 
@@ -8,7 +8,7 @@ export interface IManufacturer{
     name:string,
     logo?:IFile,
     header?:IFile,
-    about?:string,
+    about?:ILang,
     contactInfo?:IGeneric[],
     
     articlesId?:string[],
