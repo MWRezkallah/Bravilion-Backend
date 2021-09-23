@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const cors = require("cors");
-// import * as dotenv from 'dotenv';
-// const evParsed = dotenv.config({path:"./src/.env"}); // run npm run start from parent directory
+// const   dotenv = require('dotenv');
+// const evParsed = dotenv.config({path:"./.env"}); // run npm run start from parent directory
 // console.log(evParsed);
 // import * as helmet from 'helmet';
 const compression = require("compression");
@@ -38,7 +38,11 @@ app.use(compression());
 //         message:"docker work just fine!"
 //     })
 // });
-app.use(express.static('browser'));
+app.use('/bravilion-dashboard',express.static( 'bravilion-dashboard'));
+app.get(/bravilion-dashboard\/.*/, (req, res) => {
+    res.sendFile('bravilion-dashboard/index.html', { root: __dirname });
+});
+app.use(express.static( 'browser'));
 app.get(/.*/, (req, res) => {
     res.sendFile('browser/index.html', { root: __dirname });
 });

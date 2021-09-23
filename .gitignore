@@ -5,3 +5,4 @@ app.yaml
 multer-storage-service-account-key.json
 .gcloudignore
 browser/
+bravilion-dashboard/
