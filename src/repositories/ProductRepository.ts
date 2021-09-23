@@ -47,4 +47,17 @@ export class ProductRepository extends Repository<IProduct> implements IReposito
                 }
         ]).toArray()
     }
+    getAllProducts = async ()=>{
+        if(! this.collection) await this.initCollection();
+        return await this.collection?.aggregate([
+                {
+                  '$lookup': {
+                    'from': 'Category', 
+                    'localField': 'categories', 
+                    'foreignField': '_id', 
+                    'as': 'categories'
+                  }
+                }
+        ]).toArray()
+    }
 }

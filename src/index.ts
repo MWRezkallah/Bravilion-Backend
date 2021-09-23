@@ -1,15 +1,15 @@
 
 import * as express from 'express';
 import * as cors from 'cors';
-import * as dotenv from 'dotenv';
-const evParsed = dotenv.config({path:"./src/.env"}); // run npm run start from parent directory
-console.log(evParsed);
+// import * as dotenv from 'dotenv';
+// const evParsed = dotenv.config({path:"./src/.env"}); // run npm run start from parent directory
+// console.log(evParsed);
 // import * as helmet from 'helmet';
 import * as compression from 'compression';
 
 import {AuthRouter, HomeSliderRouter, CategoriesRouter, SupplierRouter, BadgeRouter,
      ProductRouter, TopCategoryRouter, ServiceRouter, HomePageRouter, PlanRouter, ManufacturerRouter,
-    HomeTopCatRouter, ClientRouter} from './routes';
+    HomeTopCatRouter, ClientRouter, AdminRouter} from './routes';
 
 
 const app = express()
@@ -27,18 +27,19 @@ app.listen(port, () => console.log(`Example app listening at ${process.env.baseU
 
 
 app.use('/api/auth', AuthRouter);
-app.use('/api/home-slider', HomeSliderRouter);
+// app.use('/api/home-slider', HomeSliderRouter);
 app.use('/api/categories', CategoriesRouter);
-app.use('/api/suppliers', SupplierRouter);
-app.use('/api/badges', BadgeRouter);
+// app.use('/api/suppliers', SupplierRouter);
+// app.use('/api/badges', BadgeRouter);
 app.use('/api/products', ProductRouter);
 app.use('/api/topCategory', TopCategoryRouter);
 app.use('/api/homeTopCategory', HomeTopCatRouter)
 app.use('/api/service', ServiceRouter);
-app.use('/api/homePage', HomePageRouter)
+// app.use('/api/homePage', HomePageRouter)
 app.use('/api/plan', PlanRouter)
 app.use('/api/manufacturer', ManufacturerRouter)
 app.use('/api/client', ClientRouter)
+app.use('/api/admin', AdminRouter)
 // app.use(helmet());
 app.use(compression());
 // app.get('/testDocker', (req, res)=>{
