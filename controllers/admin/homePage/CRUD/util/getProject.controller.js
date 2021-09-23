@@ -19,7 +19,8 @@ const getProjects = async (req, res) => {
                     as: "projects.products"
                 }
             },
-            { $replaceRoot: { newRoot: "$projects" } }
+            { $replaceRoot: { newRoot: "$projects" } },
+            { $project: { "projectId": 1, "name": 1, "coverImage": 1 } }
         ]).toArray());
         res.status(200).send({
             status: "success",

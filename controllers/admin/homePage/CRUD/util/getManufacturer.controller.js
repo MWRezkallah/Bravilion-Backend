@@ -9,15 +9,7 @@ const getManufacturers = async (req, res) => {
         if (!manuRepo.collection)
             await manuRepo.initCollection();
         const collections = await ((_a = manuRepo.collection) === null || _a === void 0 ? void 0 : _a.aggregate([
-            {
-                $lookup: {
-                    from: "Product",
-                    localField: "_id",
-                    foreignField: "ownerId",
-                    as: "Products"
-                }
-            },
-            { $project: { "tokens": 0, "password": 0 } }
+            { $project: { "_id": 1, "name": 1, "logo": 1, "header": 1 } }
         ]).toArray());
         res.status(200).send({
             status: "success",

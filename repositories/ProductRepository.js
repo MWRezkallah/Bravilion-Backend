@@ -53,11 +53,8 @@ class ProductRepository extends _1.Repository {
                 await this.initCollection();
             return await ((_a = this.collection) === null || _a === void 0 ? void 0 : _a.aggregate([
                 {
-                    '$lookup': {
-                        'from': 'Category',
-                        'localField': 'categories',
-                        'foreignField': '_id',
-                        'as': 'categories'
+                    $project: {
+                        "name": 1, "coverImage": 1, "_id": 1, "ownerId": 1, "views": 1
                     }
                 }
             ]).toArray());
