@@ -42,8 +42,8 @@ const update = async (req, res) => {
         if (values[1][0]) {
             updateManu["header"] = lib_1.extractImageModel(values[1][0]);
         }
-        if (req.body.about) {
-            updateManu["about"] = req.body.about;
+        if (req.body.arabicAbout && req.body.englishAbout) {
+            updateManu["about"] = { arabic: req.body.arabicAbout, english: req.body.englishAbout };
         }
         if (req.body.contactInfo) {
             updateManu["contactInfo"] = req.body.contactInfo;
