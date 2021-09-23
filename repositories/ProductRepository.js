@@ -47,6 +47,21 @@ class ProductRepository extends _1.Repository {
                 }
             ]).toArray());
         };
+        this.getAllProducts = async () => {
+            var _a;
+            if (!this.collection)
+                await this.initCollection();
+            return await ((_a = this.collection) === null || _a === void 0 ? void 0 : _a.aggregate([
+                {
+                    '$lookup': {
+                        'from': 'Category',
+                        'localField': 'categories',
+                        'foreignField': '_id',
+                        'as': 'categories'
+                    }
+                }
+            ]).toArray());
+        };
     }
 }
 exports.ProductRepository = ProductRepository;

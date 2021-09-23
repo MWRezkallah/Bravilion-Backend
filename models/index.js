@@ -32,4 +32,5 @@ __exportStar(require("./product.model"), exports);
 __exportStar(require("./homeTopCategory.model"), exports);
 __exportStar(require("./Project.model"), exports);
 __exportStar(require("./client.model"), exports);
+__exportStar(require("./homePageSection.model"), exports);
 //# sourceMappingURL=index.js.map
