@@ -7,7 +7,7 @@ import { login, logout, signUp, update, getManufacturer,
     createCatalogue, getCatalogue, getCatalogues, updateCatalogue, deleteCatalogue,
     createCollection, updateCollection, deleteCollection, getCollection, getCollections,
     createFamily, updateFamily, deleteFamily, getFamily, getFamilies,
-    getRequests, getRequest, updateRequest} from '../controllers/manufacturer';
+    getRequests, getRequest, updateRequest, getManufacturerInfo} from '../controllers/manufacturer';
 import  * as multer  from 'multer';
 import { imageFilter, pdfFilter, storage } from '../lib/multer';
 
@@ -26,6 +26,7 @@ router.post('/signup', [formDataParser.none(), manuRegister], signUp);
 router.put('/update', [uploadImage.fields([{name:"logo",maxCount:1}, {name:"header", maxCount:1}]), manuUpdate], update);
 router.post('/logout', [authenticateManufacturer], logout);
 router.get('/get-manufacturer/:manufacturerId?', getManufacturer)
+router.get('/get-manufacturer-info',authenticateManufacturer, getManufacturerInfo)
 
 //videos
 router.post('/create-video', authorizeManufacturer, createVideo)

@@ -35,3 +35,29 @@ export const getManufacturer = async (req: Request, res: Response) =>{
     }
 }
 
+
+export const getManufacturerInfo = async (req: Request, res: Response) =>{
+
+    try {
+
+        const manufacturerID = {"_id":new ObjectId(res.locals.manufacturer._id)};
+        const manuRepo = new ManufacturerRepository()
+        if(!manuRepo.collection) await manuRepo.initCollection();
+        const collections = await manuRepo.collection?.aggregate([
+            {$match:manufacturerID},
+            {$project:{"_id":1, "name":1, "logo":1, "header":1, "about":1, "contactInfo":1, "email":1}}
+        ]).toArray()
+        
+        res.status(200).send({
+            status:"success",
+            data: collections
+        })
+
+    } catch (error:any) {
+        res.status(400).send({
+            status:"Error",
+            message:error.message
+        })
+    }
+}
+
