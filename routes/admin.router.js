@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const admin_1 = require("../middleware/admin");
 const homePage_1 = require("../controllers/admin/homePage");
+const requests_1 = require("../controllers/admin/requests");
 const router = express_1.Router();
 //home page get-util
 router.get("/get-manufacturers", admin_1.authorizeAdmin, homePage_1.getManufacturers);
@@ -16,5 +17,8 @@ router.get('/homePage/get-sections', admin_1.authorizeAdmin, homePage_1.getHomeP
 router.put('/homePage/update-section/:sectionId', admin_1.authorizeAdmin, homePage_1.updateHomePageSection);
 router.delete('/homePage/delete-section/:sectionId', admin_1.authorizeAdmin, homePage_1.deleteHomePageSection);
 router.post('/homePage/reorder-sections', admin_1.authorizeAdmin, homePage_1.reorderSections);
+//requests
+router.get('/client-requests/:clientId?', admin_1.authorizeAdmin, requests_1.getRequestsByStatusForClient);
+router.get('/manufacturer-requests/:manufacturer?', admin_1.authorizeAdmin, requests_1.getRequestsByStatusForManufacturer);
 exports.default = router;
 //# sourceMappingURL=admin.router.js.map

@@ -17,6 +17,7 @@ router.post('/logout', [client_1.authenticateClient], client_2.logout);
 //requests 
 router.post('/create-request', client_1.authorizeClient, client_2.createRequest);
 router.get('/get-requests/:clientId?', client_1.authenticateClient, client_2.getRequests); //todo
+router.get('/get-requests-by-status/:clientId?', client_1.authenticateClient, client_2.getRequestsByStatus); //todo
 router.get('/get-request/:requestId', client_1.authenticateClient, client_2.getRequest);
 router.put('/update-request/:requestId', client_1.authorizeClient, client_2.updateRequest);
 router.delete('/delete-request/:requestId', client_1.authorizeClient, client_2.deleteRequest);

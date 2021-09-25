@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const cors = require("cors");
-// const   dotenv = require('dotenv');
-// const evParsed = dotenv.config({path:"./.env"}); // run npm run start from parent directory
+// import * as dotenv from 'dotenv';
+// const evParsed = dotenv.config({path:"./src/.env"}); // run npm run start from parent directory
 // console.log(evParsed);
 // import * as helmet from 'helmet';
 const compression = require("compression");
@@ -23,11 +23,12 @@ app.use('/api/products', routes_1.ProductRouter);
 app.use('/api/topCategory', routes_1.TopCategoryRouter);
 app.use('/api/homeTopCategory', routes_1.HomeTopCatRouter);
 app.use('/api/service', routes_1.ServiceRouter);
-// app.use('/api/homePage', HomePageRouter)
+app.use('/api/homePage', routes_1.HomePageRouter);
 app.use('/api/plan', routes_1.PlanRouter);
 app.use('/api/manufacturer', routes_1.ManufacturerRouter);
 app.use('/api/client', routes_1.ClientRouter);
 app.use('/api/admin', routes_1.AdminRouter);
+app.use('/website/api', routes_1.WebsiteRouter);
 // app.use(helmet());
 app.use(compression());
 // app.get('/testDocker', (req, res)=>{
@@ -38,11 +39,11 @@ app.use(compression());
 //         message:"docker work just fine!"
 //     })
 // });
-app.use('/bravilion-dashboard',express.static( 'bravilion-dashboard'));
+app.use('/bravilion-dashboard', express.static('bravilion-dashboard'));
 app.get(/bravilion-dashboard\/.*/, (req, res) => {
     res.sendFile('bravilion-dashboard/index.html', { root: __dirname });
 });
-app.use(express.static( 'browser'));
+app.use(express.static('browser'));
 app.get(/.*/, (req, res) => {
     res.sendFile('browser/index.html', { root: __dirname });
 });
