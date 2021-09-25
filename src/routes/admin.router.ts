@@ -21,8 +21,8 @@ router.delete('/homePage/delete-section/:sectionId', authorizeAdmin, deleteHomeP
 router.post('/homePage/reorder-sections', authorizeAdmin, reorderSections);
 
 //requests
-router.get('/client-requests/:clientId?', authorizeAdmin, getRequestsByStatusForClient);
-router.get('/manufacturer-requests/:manufacturer?', authorizeAdmin, getRequestsByStatusForManufacturer);
+router.post('/client-requests/:clientId?', authorizeAdmin, getRequestsByStatusForClient);
+router.post('/manufacturer-requests/:manufacturer?', authorizeAdmin, getRequestsByStatusForManufacturer);
 
 
 export default router;

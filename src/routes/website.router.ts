@@ -16,7 +16,7 @@ router.get('/home-page-sections', getHomePageSections);
 router.get('/product/:productId', getProductFull);
 
 //search product
-router.get('/search-for-product', searchForProduct);
+router.post('/search-for-product', searchForProduct);
 router.get('/categories', getAllCategories)
 
 //manufacturer

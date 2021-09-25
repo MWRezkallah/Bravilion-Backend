@@ -79,7 +79,7 @@ router.delete('/delete-family/:familyId', authorizeManufacturer, deleteFamily)
 //requests
 router.get('/get-requests/:manufacturerId?',authenticateManufacturer, getRequests)
 router.get('/get-request/:requestId?',authenticateManufacturer, getRequest)
-router.get('/get-requests-by-status',authenticateManufacturer, getRequestsFilter)
+router.post('/get-requests-by-status',authenticateManufacturer, getRequestsFilter)
 router.put('/update-request/:requestId/:orderId',authenticateManufacturer, updateRequest)
 
 // todo
