@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { HomePageRepository } from '../repositories';
+import { HomePageAssetsRepository } from '../repositories';
 import * as Storage from '@google-cloud/storage';
 import { extractImageModel } from '../lib/index';
 import { ObjectId } from 'bson';
@@ -8,7 +8,7 @@ import { ObjectId } from 'bson';
 export const createHomePage = async (req: Request, res: Response) => {
     
     try{
-        const homePageRepo = new HomePageRepository();
+        const homePageRepo = new HomePageAssetsRepository();
 
         const values = Object.values(req.files !== undefined ? req.files: {});
         let homePage = {...req.body}
@@ -17,15 +17,27 @@ export const createHomePage = async (req: Request, res: Response) => {
                 homePage[`${file.fieldname}`]= extractImageModel(file);
         })
         
+        if(!homePageRepo.collection) await homePageRepo.initCollection();
+        const homep = await homePageRepo.collection?.findOne({});
+        let result;
+        if (homep){
+            result = await homePageRepo.collection?.replaceOne({},{...homePage});
+            const storage = new Storage();
+            for (let i in homep){
+                if(homep[i].name && homep[i].path && homep[i].type && homep[i].createdAt){
+                    await storage.bucket(`${process.env.GCS_BUCKET}`).file(homep[i].name).delete();
+                }
+            }
+        }else {
+            result = await homePageRepo.collection?.insertOne({...homePage})
+        }
 
-        const re = await homePageRepo.create(homePage);
         
-
-    
         res.status(200).send({
             status: 'success',
-            data: re
+            data: result
         });
+
     }catch(e){
         res.status(400).send({
             err:e
@@ -35,7 +47,7 @@ export const createHomePage = async (req: Request, res: Response) => {
 
 export const getHomePages = async (req: Request, res: Response) => {
     try{
-        const homePageRepo = new HomePageRepository();
+        const homePageRepo = new HomePageAssetsRepository();
 
         const homePages = await homePageRepo.findAll();
     
@@ -54,7 +66,7 @@ export const getHomePages = async (req: Request, res: Response) => {
 
 export const getHomePage = async (req: Request, res: Response) => {
     try{
-        const homePageRepo = new HomePageRepository();
+        const homePageRepo = new HomePageAssetsRepository();
         const _id = req.params.id;
         const homePage = await homePageRepo.findOne(_id);
     
@@ -73,7 +85,7 @@ export const getHomePage = async (req: Request, res: Response) => {
 export const updateHomePage = async (req: Request, res: Response) => {
     
     try{
-        const homePageRepo = new HomePageRepository();
+        const homePageRepo = new HomePageAssetsRepository();
 
         const _id = req.params.id;
         const homePage:any = await homePageRepo.findOne(_id);
@@ -84,25 +96,25 @@ export const updateHomePage = async (req: Request, res: Response) => {
         // unlinkSync(prevMobileImage);
 
   
+        
+        
+        const values = Object.values(req.files !== undefined ? req.files: {});
+        
+        
+        let updatedHomePage = {...req.body}
+        values.forEach(file => {
+            //  Object.fromEntries([[`${file.fieldname}`, extractImageModel(file)]])
+            updatedHomePage[`${file.fieldname}`]= extractImageModel(file);
+        })
+        
+        const re = await homePageRepo.collection?.replaceOne({"_id":new ObjectId(_id)}, updatedHomePage);
+        
         const storage = new Storage();
         for (let i in homePage){
             if(homePage[i].name && homePage[i].path && homePage[i].type && homePage[i].createdAt){
                 await storage.bucket(`${process.env.GCS_BUCKET}`).file(homePage[i].name).delete();
             }
         }
-
-
-        const values = Object.values(req.files !== undefined ? req.files: {});
-
-   
-        let updatedHomePage = {...req.body}
-        values.forEach(file => {
-                //  Object.fromEntries([[`${file.fieldname}`, extractImageModel(file)]])
-                updatedHomePage[`${file.fieldname}`]= extractImageModel(file);
-        })
-        
-        const re = await homePageRepo.collection?.replaceOne({"_id":new ObjectId(_id)}, updatedHomePage);
-        
 
     
         res.status(200).send({
@@ -119,21 +131,21 @@ export const updateHomePage = async (req: Request, res: Response) => {
 
 export const deleteHomePage = async (req: Request, res: Response) => {
     try{
-        const homePageRepo = new HomePageRepository();
+        const homePageRepo = new HomePageAssetsRepository();
         const _id = req.params.id;
         const homePage:any = await homePageRepo.findOne(_id);
   
+        
+        
+        
+        await homePageRepo.delete(_id);
+        
         const storage = new Storage();
         for (let i in homePage){
             if(homePage[i].name && homePage[i].path && homePage[i].type && homePage[i].createdAt){
                 await storage.bucket(`${process.env.GCS_BUCKET}`).file(homePage[i].name).delete();
             }
         }
-    
-
-
-        
-        await homePageRepo.delete(_id);
     
         res.status(200).send({
             status: 'successfully delete',

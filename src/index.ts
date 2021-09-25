@@ -1,7 +1,7 @@
 
 import * as express from 'express';
 import * as cors from 'cors';
-// import * as dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 // const evParsed = dotenv.config({path:"./src/.env"}); // run npm run start from parent directory
 // console.log(evParsed);
 // import * as helmet from 'helmet';
@@ -9,7 +9,7 @@ import * as compression from 'compression';
 
 import {AuthRouter, HomeSliderRouter, CategoriesRouter, SupplierRouter, BadgeRouter,
      ProductRouter, TopCategoryRouter, ServiceRouter, HomePageRouter, PlanRouter, ManufacturerRouter,
-    HomeTopCatRouter, ClientRouter, AdminRouter} from './routes';
+    HomeTopCatRouter, ClientRouter, AdminRouter, WebsiteRouter} from './routes';
 
 
 const app = express()
@@ -35,11 +35,12 @@ app.use('/api/products', ProductRouter);
 app.use('/api/topCategory', TopCategoryRouter);
 app.use('/api/homeTopCategory', HomeTopCatRouter)
 app.use('/api/service', ServiceRouter);
-// app.use('/api/homePage', HomePageRouter)
+app.use('/api/homePage', HomePageRouter)
 app.use('/api/plan', PlanRouter)
 app.use('/api/manufacturer', ManufacturerRouter)
 app.use('/api/client', ClientRouter)
 app.use('/api/admin', AdminRouter)
+app.use('/website/api', WebsiteRouter)
 // app.use(helmet());
 app.use(compression());
 // app.get('/testDocker', (req, res)=>{
