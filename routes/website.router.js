@@ -9,7 +9,7 @@ router.get('/home-page-sections', website_1.getHomePageSections);
 //product
 router.get('/product/:productId', website_1.getProductFull);
 //search product
-router.get('/search-for-product', website_1.searchForProduct);
+router.post('/search-for-product', website_1.searchForProduct);
 router.get('/categories', website_1.getAllCategories);
 //manufacturer
 router.get('/manufacturer/:manufacturerId?', website_1.getManufacturer);

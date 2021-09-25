@@ -18,7 +18,7 @@ router.put('/homePage/update-section/:sectionId', admin_1.authorizeAdmin, homePa
 router.delete('/homePage/delete-section/:sectionId', admin_1.authorizeAdmin, homePage_1.deleteHomePageSection);
 router.post('/homePage/reorder-sections', admin_1.authorizeAdmin, homePage_1.reorderSections);
 //requests
-router.get('/client-requests/:clientId?', admin_1.authorizeAdmin, requests_1.getRequestsByStatusForClient);
-router.get('/manufacturer-requests/:manufacturer?', admin_1.authorizeAdmin, requests_1.getRequestsByStatusForManufacturer);
+router.post('/client-requests/:clientId?', admin_1.authorizeAdmin, requests_1.getRequestsByStatusForClient);
+router.post('/manufacturer-requests/:manufacturer?', admin_1.authorizeAdmin, requests_1.getRequestsByStatusForManufacturer);
 exports.default = router;
 //# sourceMappingURL=admin.router.js.map

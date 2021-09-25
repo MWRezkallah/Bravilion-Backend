@@ -57,7 +57,7 @@ router.delete('/delete-family/:familyId', Manufacturer_1.authorizeManufacturer, 
 //requests
 router.get('/get-requests/:manufacturerId?', Manufacturer_1.authenticateManufacturer, manufacturer_1.getRequests);
 router.get('/get-request/:requestId?', Manufacturer_1.authenticateManufacturer, manufacturer_1.getRequest);
-router.get('/get-requests-by-status', Manufacturer_1.authenticateManufacturer, manufacturer_1.getRequestsFilter);
+router.post('/get-requests-by-status', Manufacturer_1.authenticateManufacturer, manufacturer_1.getRequestsFilter);
 router.put('/update-request/:requestId/:orderId', Manufacturer_1.authenticateManufacturer, manufacturer_1.updateRequest);
 // todo
 //articles
