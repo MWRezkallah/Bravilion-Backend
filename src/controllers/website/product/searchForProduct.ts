@@ -11,8 +11,8 @@ export const searchForProduct = async (req: Request, res: Response) => {
                 {
                     $match:{
                         $or:[
-                            {"name.arabic":new RegExp(req.body.name)},
-                            {"name.english":new RegExp(req.body.name)}
+                            {"name.arabic":new RegExp(req.body.name,"i")},
+                            {"name.english":new RegExp(req.body.name, "i")}
                         ]
                     }
                 })

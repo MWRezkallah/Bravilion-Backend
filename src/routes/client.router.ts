@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { clientRegister, authenticateClient, authorizeClient, clientUpdate } from '../middleware/client';
 import { login, logout, signUp, update, 
-    createRequest, updateRequest, deleteRequest, getRequests, getRequest
+    createRequest, updateRequest, deleteRequest, getRequests, getRequest, getRequestsByStatus
 } from '../controllers/client';
 import  * as multer  from 'multer';
 import { imageFilter,  storage } from '../lib/multer';
@@ -27,6 +27,7 @@ router.post('/logout', [authenticateClient], logout);
 //requests 
 router.post('/create-request', authorizeClient, createRequest)
 router.get('/get-requests/:clientId?',authenticateClient, getRequests) //todo
+router.get('/get-requests-by-status/:clientId?',authenticateClient, getRequestsByStatus) //todo
 router.get('/get-request/:requestId',authenticateClient, getRequest)
 router.put('/update-request/:requestId', authorizeClient, updateRequest)
 router.delete('/delete-request/:requestId', authorizeClient, deleteRequest)

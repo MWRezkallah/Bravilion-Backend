@@ -7,7 +7,7 @@ import { login, logout, signUp, update, getManufacturer,
     createCatalogue, getCatalogue, getCatalogues, updateCatalogue, deleteCatalogue,
     createCollection, updateCollection, deleteCollection, getCollection, getCollections,
     createFamily, updateFamily, deleteFamily, getFamily, getFamilies,
-    getRequests, getRequest, updateRequest, getManufacturerInfo} from '../controllers/manufacturer';
+    getRequests, getRequest, updateRequest, getRequestsFilter, getManufacturerInfo} from '../controllers/manufacturer';
 import  * as multer  from 'multer';
 import { imageFilter, pdfFilter, storage } from '../lib/multer';
 
@@ -79,6 +79,7 @@ router.delete('/delete-family/:familyId', authorizeManufacturer, deleteFamily)
 //requests
 router.get('/get-requests/:manufacturerId?',authenticateManufacturer, getRequests)
 router.get('/get-request/:requestId?',authenticateManufacturer, getRequest)
+router.get('/get-requests-by-status',authenticateManufacturer, getRequestsFilter)
 router.put('/update-request/:requestId/:orderId',authenticateManufacturer, updateRequest)
 
 // todo
