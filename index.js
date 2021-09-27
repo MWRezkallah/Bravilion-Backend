@@ -39,7 +39,7 @@ app.use(compression());
 //         message:"docker work just fine!"
 //     })
 // });
-app.use('/bravilion-dashboard', express.static('bravilion-dashboard'));
+app.use('/bravilion-dashboard/', express.static('bravilion-dashboard'));
 app.get(/bravilion-dashboard\/.*/, (req, res) => {
     res.sendFile('bravilion-dashboard/index.html', { root: __dirname });
 });
