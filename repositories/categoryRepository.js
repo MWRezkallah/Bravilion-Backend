@@ -54,7 +54,7 @@ class CategoryRepository extends repository_1.Repository {
             await this.initCollection();
         }
         return await ((_a = this.collection) === null || _a === void 0 ? void 0 : _a.aggregate([
-            { $project: { "name": 1, "level": 1 } }
+            { $project: { "name": 1, "level": 1, "properties": 1 } }
         ]).toArray());
     }
     async getHomeTopCategoriesExcluded() {

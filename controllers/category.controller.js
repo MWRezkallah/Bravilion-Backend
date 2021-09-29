@@ -18,6 +18,9 @@ const createCategory = async (req, res) => {
             coverImage: coverImageData,
             level: Number.parseInt(req.body.level) || 0,
         };
+        if (req.body.properties) {
+            data["properties"] = req.body.properties;
+        }
         if (req.body.parentCategoryId) {
             data["parentCategoryId"] = new bson_1.ObjectId(req.body.parentCategoryId);
         }
@@ -85,6 +88,9 @@ const updateCategory = async (req, res) => {
             coverImage: coverImageData,
             level: Number.parseInt(req.body.level) || Number.parseInt(category.level) || 0,
         };
+        if (req.body.properties) {
+            data["properties"] = req.body.properties;
+        }
         if (req.body.parentCategoryId) {
             data["parentCategoryId"] = new bson_1.ObjectId(req.body.parentCategoryId);
         }
