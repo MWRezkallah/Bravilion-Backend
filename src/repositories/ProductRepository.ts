@@ -60,23 +60,33 @@ export class ProductRepository extends Repository<IProduct> implements IReposito
     
     getProductFull= async(productId:ObjectId)=>{
       const pipeline = [
-        {"$match":{"_id":productId}},
         {
-            '$lookup': {
-                'from': 'Manufacturer', 
-                'localField': 'ownerId', 
-                'foreignField': '_id', 
-                'as': 'ownerId'
-              }
-        },
-        {
-              '$unwind': {
-                'path': '$ownerId'
-              }
-        },
-        {
-              '$addFields': {
-                'families': {
+          '$lookup': {
+            'from': 'Manufacturer', 
+            'localField': 'ownerId', 
+            'foreignField': '_id', 
+            'as': 'ownerId'
+          }
+        }, {
+          '$unwind': {
+            'path': '$ownerId'
+          }
+        }, {
+          '$match': {
+            '_id': productId
+          }
+        }, {
+          '$addFields': {
+            'families': {
+              '$cond': {
+                'if': {
+                  '$ne': [
+                    {
+                      '$type': '$familyId'
+                    }, 'missing'
+                  ]
+                }, 
+                'then': {
                   '$filter': {
                     'input': '$ownerId.families', 
                     'cond': {
@@ -86,7 +96,19 @@ export class ProductRepository extends Repository<IProduct> implements IReposito
                     }
                   }
                 }, 
-                'collections': {
+                'else': ''
+              }
+            }, 
+            'collections': {
+              '$cond': {
+                'if': {
+                  '$ne': [
+                    {
+                      '$type': '$collectionId'
+                    }, 'missing'
+                  ]
+                }, 
+                'then': {
                   '$filter': {
                     'input': '$ownerId.collections', 
                     'cond': {
@@ -96,7 +118,19 @@ export class ProductRepository extends Repository<IProduct> implements IReposito
                     }
                   }
                 }, 
-                'projects': {
+                'else': ''
+              }
+            }, 
+            'projects': {
+              '$cond': {
+                'if': {
+                  '$ne': [
+                    {
+                      '$type': '$projectId'
+                    }, 'missing'
+                  ]
+                }, 
+                'then': {
                   '$filter': {
                     'input': '$ownerId.projects', 
                     'cond': {
@@ -106,52 +140,95 @@ export class ProductRepository extends Repository<IProduct> implements IReposito
                     }
                   }
                 }, 
-                'owner': {
-                  'ownerId': '$ownerId._id', 
-                  'name': '$ownerId.name', 
-                  'logo': '$ownerId.logo', 
-                  'header': '$ownerId.header', 
-                  'about': '$ownerId.about', 
-                  'contactInfo': '$ownerId.contactInfo', 
-                  'enquiries': '$ownerId.enquiries', 
-                  'videos': '$ownerId.videos', 
-                  'catalogues': '$ownerId.catalogues'
+                'else': ''
+              }
+            }, 
+            'owner': {
+              'ownerId': '$ownerId._id', 
+              'name': '$ownerId.name', 
+              'logo': '$ownerId.logo', 
+              'header': '$ownerId.header', 
+              'about': '$ownerId.about', 
+              'contactInfo': '$ownerId.contactInfo', 
+              'enquiries': '$ownerId.enquiries', 
+              'videos': '$ownerId.videos', 
+              'catalogues': '$ownerId.catalogues'
+            }
+          }
+        }, {
+          '$lookup': {
+            'from': 'Product', 
+            'let': {
+              'famId': '$familyId'
+            }, 
+            'pipeline': [
+              {
+                '$match': {
+                  '$expr': {
+                    '$and': [
+                      {
+                        '$ne': [
+                          {
+                            '$type': '$$famId'
+                          }, 'missing'
+                        ]
+                      }, {
+                        '$eq': [
+                          '$familyId', '$$famId'
+                        ]
+                      }
+                    ]
+                  }
                 }
               }
-        },
-        {
-              '$lookup': {
-                'from': 'Product', 
-                'localField': 'familyId', 
-                'foreignField': 'familyId', 
-                'as': 'familyProducts'
+            ], 
+            'as': 'familyProducts'
+          }
+        }, {
+          '$lookup': {
+            'from': 'Product', 
+            'let': {
+              'collId': '$collectionId'
+            }, 
+            'pipeline': [
+              {
+                '$match': {
+                  '$expr': {
+                    '$and': [
+                      {
+                        '$ne': [
+                          {
+                            '$type': '$$collId'
+                          }, 'missing'
+                        ]
+                      }, {
+                        '$eq': [
+                          '$collectionId', '$$collId'
+                        ]
+                      }
+                    ]
+                  }
+                }
               }
-        },
-        {
-              '$lookup': {
-                'from': 'Product', 
-                'localField': 'collectionId', 
-                'foreignField': 'collectionId', 
-                'as': 'similarProducts'
-              }
-        },
-        {
-              '$lookup': {
-                'from': 'Category', 
-                'localField': 'categories', 
-                'foreignField': '_id', 
-                'as': 'categories'
-              }
-        },
-        {
-              '$project': {
-                'ownerId': 0, 
-                'collectionId': 0, 
-                'familyId': 0, 
-                'projectsId': 0
-              }
+            ], 
+            'as': 'similarProducts'
+          }
+        }, {
+          '$lookup': {
+            'from': 'Category', 
+            'localField': 'categories', 
+            'foreignField': '_id', 
+            'as': 'categories'
+          }
+        }, {
+          '$project': {
+            'ownerId': 0, 
+            'collectionId': 0, 
+            'familyId': 0, 
+            'projectsId': 0
+          }
         }
-    ]
+      ]
     if(! this.collection) await this.initCollection();
       await this.collection?.updateOne({"_id":productId}, {$inc:{"views":1}});
       return await this.collection?.aggregate(pipeline).toArray()
