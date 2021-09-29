@@ -1,5 +1,5 @@
 import { ObjectId } from "bson";
-import { IFile, ILang } from ".";
+import { IFile, IGeneric, ILang } from ".";
 
 
 export interface ICategory{
@@ -7,5 +7,6 @@ export interface ICategory{
     name:ILang;
     coverImage:IFile;
     parentCategoryId?:ObjectId
-    level?:number
+    level?:number,
+    properties?:IGeneric
 }

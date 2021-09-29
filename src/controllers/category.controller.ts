@@ -22,6 +22,7 @@ export const createCategory = async (req: Request, res: Response) => {
             coverImage: coverImageData,
             level: Number.parseInt(req.body.level) || 0,
         }
+        if(req.body.properties) {data["properties"] = req.body.properties;}
         if(req.body.parentCategoryId)
         {
             data["parentCategoryId"]= new ObjectId(req.body.parentCategoryId)
@@ -103,6 +104,8 @@ export const updateCategory = async (req: Request, res: Response) => {
             coverImage: coverImageData,
             level:  Number.parseInt(req.body.level) || Number.parseInt(category.level) || 0,
         }
+        if(req.body.properties) {data["properties"] = req.body.properties;}
+
         if(req.body.parentCategoryId)
         {
             data["parentCategoryId"]= new ObjectId(req.body.parentCategoryId)
